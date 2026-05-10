@@ -1,0 +1,43 @@
+@charset "UTF-8";
+
+@font-face {
+font-family: 'Noto Sans Japanese';
+font-style: normal;
+font-weight: 400;
+src: url('../fonts/NotoSansCJKjp-Regular.woff2') format('woff2'),
+url('../fonts/NotoSansCJKjp-Regular.woff') format('woff'),
+url('../fonts/NotoSansCJKjp-Regular.eot') format('embedded-opentype');
+}
+@font-face {
+font-family: 'Noto Sans Japanese';
+font-style: normal;
+font-weight: 500;
+src: url('../fonts/NotoSansCJKjp-Medium.woff2') format('woff2'),
+url('../fonts/NotoSansCJKjp-Medium.woff') format('woff'),
+url('../fonts/NotoSansCJKjp-Medium.eot') format('embedded-opentype');
+}
+@font-face {
+font-family: 'Noto Sans Japanese';
+font-style: normal;
+font-weight: 700;
+src: url('../fonts/NotoSansCJKjp-Bold.woff2') format('woff2'),
+url('../fonts/NotoSansCJKjp-Bold.woff') format('woff'),
+url('../fonts/NotoSansCJKjp-Bold.eot') format('embedded-opentype');
+}
+@font-face {
+font-family: 'Noto Sans Japanese';
+font-style: normal;
+font-weight: 900;
+src: url('../fonts/NotoSansCJKjp-Black.woff2') format('woff2'),
+url('../fonts/NotoSansCJKjp-Black.woff') format('woff'),
+url('../fonts/NotoSansCJKjp-Black.eot') format('embedded-opentype');
+}
+@font-face {
+font-family: 'HelveticaNeue';
+font-style: normal;
+font-weight: 500;
+src: url('../fonts/HelveticaNeue_medium.woff2') format('woff2'),
+url('../fonts/HelveticaNeue_medium.woff') format('woff'),
+url('../fonts/HelveticaNeue_medium.eot') format('embedded-opentype');
+}
+

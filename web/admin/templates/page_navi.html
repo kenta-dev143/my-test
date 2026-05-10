@@ -1,0 +1,26 @@
+{if $page_flg != 0}
+<div style="font-size: 12px;">
+  {if $page_back == 1}
+    <a href="index.php?page={$page}&offset={$offset_first}">&lt;&lt;最初へ</a>&nbsp;
+    <a href="index.php?page={$page}&offset={$offset_back}">&lt;前へ</a>
+  {/if}
+  {if $start_dot == 1}<a href="index.php?page={$page}&offset={$offset_back_page}">…</a>{/if}
+  {foreach from=$page_navi item=navi name=page_roop}
+    {if $navi.link != 0}
+      <a href="index.php?page={$page}&offset={$navi.offset}">{$navi.page_num}</a>
+    {else}
+      {$navi.page_num}
+    {/if}
+    {if $navi.separator == 1}
+      |
+    {/if}
+  {/foreach}
+  {if $end_dot == 1}<a href="index.php?page={$page}&offset={$offset_next_page}">…</a>{/if}
+  {if $page_next == 1}
+    <a href="index.php?page={$page}&offset={$offset_next}">次へ&gt;</a>&nbsp;
+    <a href="index.php?page={$page}&offset={$offset_last}">最後へ&gt;&gt;</a>
+  {/if}
+  <br>
+  ({$count}件中　{$st_count}件～{$en_count}件目)
+</div>
+{/if}

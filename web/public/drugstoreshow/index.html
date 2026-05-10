@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日本アクセス - メーカー別商品案内</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <style>
+        .timeline-line {
+            background-color: #707070;
+        }
+        .time-dot {
+            box-shadow: 0 0 0 6px white, 0 0 0 12px rgba(0, 98, 177, 0.2);
+        }
+        .section-card {
+            background: #ffffff;
+            border: 1px solid rgba(112, 112, 112, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        .toc-card {
+            background-color: #0062B1;
+        }
+        .enhanced-shadow {
+            box-shadow: 0 10px 15px -3px rgba(0, 98, 177, 0.1), 0 4px 6px -2px rgba(0, 98, 177, 0.05);
+        }
+        .toc-item {
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .toc-item:hover {
+            border-left-color: #00A651;
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(0, 166, 81, 0.4);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 166, 81, 0.2);
+        }
+        .toc-item:focus {
+            border-left-color: #00A651;
+            background: rgba(255, 255, 255, 0.1);
+            outline: none;
+        }
+        .toc-item:active {
+            transform: translateY(0);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .time-label {
+            font-family: 'Courier New', monospace;
+            letter-spacing: 0.05em;
+            color: #0062B1;
+        }
+        .product-card {
+            transition: transform 0.2s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-2px);
+        }
+        .allergen-tag {
+            background-color: #00A651;
+            color: #ffffff;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            font-weight: 600;
+        }
+        .product-image {
+            transition: transform 0.3s ease;
+            border: 2px solid rgba(112, 112, 112, 0.2);
+        }
+        .product-image:hover {
+            transform: scale(1.05);
+            border-color: #0062B1;
+        }
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+        }
+        .error {
+            background-color: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+        }
+        .list-time{
+            font-size: 2rem !important;
+            font-weight: 700 !important;
+            padding-bottom: 5px;
+        }
+        .custom-blue { color: #0062B1; }
+        .custom-gray { color: #707070; }
+        .custom-green { color: #00A651; }
+        .bg-custom-blue { background-color: #0062B1; }
+        .bg-custom-gray { background-color: #707070; }
+        .bg-custom-green { background-color: #00A651; }
+        .additional-info {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            color: #495057;
+            font-size: 0.875rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-50 via-slate-50 to-gray-100 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white backdrop-blur-md shadow-lg sticky top-0 z-50 border-b-2" style="border-color: #0062B1;">
+        <div class="max-w-md mx-auto px-6 py-12">
+            <div class="text-center space-y-4">
+                <h1 class="text-4xl font-bold tracking-wide leading-tight custom-blue">
+                    日本アクセス
+                </h1>
+                <div class="flex items-center justify-center space-x-2">
+                    <div class="w-8 h-0.5 rounded-full bg-custom-gray"></div>
+                    <span class="text-lg font-medium tracking-wider custom-gray">
+                        時間帯別メーカー商品案内
+                    </span>
+                    <div class="w-8 h-0.5 rounded-full bg-custom-gray"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Loading Message -->
+    <div id="loading" class="loading">
+        <div class="text-center">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto mb-4" style="border-color: #0062B1;"></div>
+            <p class="custom-gray">商品データを読み込み中...</p>
+        </div>
+    </div>
+
+    <!-- Error Message -->
+    <div id="error" class="hidden max-w-md mx-auto px-6 py-8">
+        <div class="error">
+            <h3 class="font-bold mb-2">⚠️ エラーが発生しました</h3>
+            <p>CSVファイル「maker_list.csv」を読み込めませんでした。ファイルが存在するか確認してください。</p>
+        </div>
+    </div>
+
+    <!-- Table of Contents -->
+    <section id="toc" class="max-w-md mx-auto px-6 py-8 hidden">
+        <h2 class="text-lg font-light mb-4 text-center tracking-wide custom-blue">商品紹介スケジュール</h2>
+        <p class="text-center text-sm mb-6 custom-gray">
+            <-- タップでスクロールされます -->
+        </p>
+        <div class="toc-card rounded-lg p-4 enhanced-shadow text-white">
+            <nav id="toc-nav" class="space-y-1">
+                <!-- 動的に生成される目次 -->
+            </nav>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main id="main-content" class="max-w-md mx-auto px-6 py-6 relative hidden">
+        <!-- Timeline Line -->
+        <div class="absolute left-10 top-0 bottom-0 w-0.5 timeline-line opacity-60"></div>
+        <!-- 動的に生成されるセクション -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white/90 backdrop-blur-md border-t-2 mt-20" style="border-color: #707070;">
+        <div class="max-w-md mx-auto px-6 py-10 text-center">
+            <p class="text-sm font-light tracking-wide custom-blue">
+                © 2025 日本アクセス
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // グローバル変数
+        let productData = [];
+        let timeSlots = {};
+
+        // CSVファイルを読み込む
+        async function loadCSV() {
+            try {
+                const response = await fetch('maker_list.csv');
+                if (!response.ok) {
+                    throw new Error('CSVファイルが見つかりません');
+                }
+                const csvText = await response.text();
+                parseCSV(csvText);
+            } catch (error) {
+                console.error('CSV読み込みエラー:', error);
+                showError();
+            }
+        }
+
+        // CSVを解析する
+        function parseCSV(csvText) {
+            Papa.parse(csvText, {
+                header: false,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    if (results.errors.length > 0) {
+                        console.error('CSV解析エラー:', results.errors);
+                        showError();
+                        return;
+                    }
+                    
+                    productData = results.data;
+                    processData();
+                    generateContent();
+                }
+            });
+        }
+
+        // データを時間帯ごと、さらにメーカーごとにグループ化
+        function processData() {
+            timeSlots = {};
+            
+            productData.forEach((row, index) => {
+                if (index === 0) return; // ヘッダー行をスキップ
+                
+                // 7列に対応（追加情報列を含む）
+                const [timeSlot, maker, productName, frontImage, backImage, allergens, additionalInfo] = row;
+                
+                if (!timeSlot || !maker || !productName) return; // 空のデータをスキップ
+                
+                if (!timeSlots[timeSlot]) {
+                    timeSlots[timeSlot] = {};
+                }
+                
+                if (!timeSlots[timeSlot][maker]) {
+                    timeSlots[timeSlot][maker] = [];
+                }
+                
+                // アレルゲン情報の処理（「・」と「、」の両方に対応）
+                let allergenList = [];
+                if (allergens && allergens.trim() !== '' && allergens.trim() !== '無し') {
+                    // 「・」と「、」の両方で分割
+                    allergenList = allergens.split(/[・、]/).map(a => a.trim()).filter(a => a !== '');
+                }
+                
+                timeSlots[timeSlot][maker].push({
+                    productName: productName,
+                    frontImage: frontImage || 'image/noimage.png',
+                    backImage: backImage || 'image/noimage.png',
+                    allergens: allergenList,
+                    additionalInfo: additionalInfo && additionalInfo.trim() ? additionalInfo.trim() : null
+                });
+            });
+        }
+
+        // 目次を生成
+        function generateTOC() {
+            const tocNav = document.getElementById('toc-nav');
+            tocNav.innerHTML = '';
+            
+            Object.keys(timeSlots).forEach(timeSlot => {
+                const link = document.createElement('a');
+                link.href = `#session-${timeSlot.replace(':', '')}`;
+                link.className = 'toc-item block px-4 py-4 rounded font-light tracking-wide mb-2 cursor-pointer';
+                
+                // 時間帯と商品リストを縦に並べる（メーカー名を強調し、同じメーカーの商品をまとめる）
+                let content = `<div class="font-bold list-time text-white mb-2 text-base">${timeSlot}</div>`;
+                
+                Object.keys(timeSlots[timeSlot]).forEach(maker => {
+                    content += `<div class="text-sm text-gray-200 leading-relaxed mb-3">
+                        <div class="font-semibold">- ${maker}</div>`;
+                    
+                    timeSlots[timeSlot][maker].forEach(product => {
+                        content += `<div class="ml-4 text-gray-300">${product.productName}</div>`;
+                    });
+                    
+                    content += `</div>`;
+                });
+                
+                link.innerHTML = content;
+                tocNav.appendChild(link);
+            });
+        }
+
+        // メインコンテンツを生成
+        function generateMainContent() {
+            const mainContent = document.getElementById('main-content');
+            const timelineContent = mainContent.querySelector('.timeline-line').nextElementSibling?.remove();
+            
+            // 既存のセクションをクリア
+            const existingSections = mainContent.querySelectorAll('section');
+            existingSections.forEach(section => section.remove());
+            
+            const colors = ['bg-custom-blue', 'bg-custom-gray', 'bg-custom-green', 'bg-custom-gray', 'bg-custom-blue'];
+            let colorIndex = 0;
+            
+            Object.keys(timeSlots).forEach(timeSlot => {
+                const section = document.createElement('section');
+                section.id = `session-${timeSlot.replace(':', '')}`;
+                section.className = 'relative mb-16 scroll-mt-24';
+
+                section.innerHTML = `
+                    <div class="flex items-center mb-8">
+                        <div class="w-6 h-6 bg-custom-blue rounded-full time-dot flex-shrink-0"></div>
+                        <h2 class="ml-8 text-2xl font-light time-label">${timeSlot}</h2>
+                    </div>
+                `;
+                
+                // 各メーカーごとに商品カードを生成
+                Object.keys(timeSlots[timeSlot]).forEach(maker => {
+                    const makerSection = createMakerSection(maker, timeSlots[timeSlot][maker]);
+                    section.appendChild(makerSection);
+                });
+                
+                mainContent.appendChild(section);
+            });
+        }
+
+        // メーカーセクションを生成
+        function createMakerSection(maker, products) {
+            const makerDiv = document.createElement('div');
+            makerDiv.className = 'ml-8 mb-6 section-card rounded-lg p-4 enhanced-shadow';
+            
+            // メーカー名のヘッダー
+            const makerHeader = document.createElement('div');
+            makerHeader.className = 'mb-4 pb-3 border-b border-gray-200';
+            makerHeader.innerHTML = `
+                <h3 class="font-medium text-lg tracking-wide custom-blue">${maker}</h3>
+                <p class="text-sm custom-gray">${products.length}商品</p>
+            `;
+            makerDiv.appendChild(makerHeader);
+            
+            // 各商品を表示
+            products.forEach(product => {
+                const productCard = createProductCard(product, maker);
+                makerDiv.appendChild(productCard);
+            });
+            
+            return makerDiv;
+        }
+
+        // 商品カードを生成
+        function createProductCard(product, maker) {
+            const cardDiv = document.createElement('div');
+            cardDiv.className = 'product-card mb-6 last:mb-0';
+            
+            const allergenTags = product.allergens.map(allergen => 
+                `<span class="allergen-tag">${allergen}</span>`
+            ).join('');
+            
+            // 追加情報の表示部分
+            const additionalInfoSection = product.additionalInfo ? 
+                `<div class="additional-info">
+                    <div class="font-medium mb-1 text-gray-700">追加情報</div>
+                    <div>${product.additionalInfo}</div>
+                </div>` : '';
+            
+            cardDiv.innerHTML = `
+                <div class="border-l-4 border-custom-green pl-4 mb-4">
+                    <h4 class="font-medium text-base custom-blue">${product.productName}</h4>
+                </div>
+                
+                <div class="space-y-4">
+                    <!-- 商品画像 -->
+                    <div class="space-y-4">
+                        <div class="text-center">
+                            <img src="${product.frontImage}" alt="${product.productName} 表面" class="w-full object-cover rounded-lg shadow-sm product-image mx-auto" onerror="this.src='image/noimage.png'">
+                            <p class="text-xs text-gray-500 mt-2">商品表面</p>
+                        </div>
+                        <div class="text-center">
+                            <img src="${product.backImage}" alt="${product.productName} 裏面" class="w-full object-cover rounded-lg shadow-sm product-image mx-auto" onerror="this.src='image/noimage.png'">
+                            <p class="text-xs text-gray-500 mt-2">商品裏面</p>
+                        </div>
+                    </div>
+                    
+                    <!-- アレルギー情報 -->
+                    <div class="bg-white/70 rounded-lg p-3 border border-gray-100">
+                        <h5 class="font-medium mb-2 custom-blue text-sm">アレルギー物質</h5>
+                        <div class="flex flex-wrap gap-2">
+                            ${allergenTags || '<span class="allergen-tag">なし</span>'}
+                        </div>
+                    </div>
+                    
+                    <!-- 追加情報 -->
+                    ${additionalInfoSection}
+                </div>
+            `;
+            
+            return cardDiv;
+        }
+
+        // コンテンツ生成
+        function generateContent() {
+            generateTOC();
+            generateMainContent();
+            hideLoading();
+            showContent();
+            setupEventListeners();
+        }
+
+        // イベントリスナーを設定
+        function setupEventListeners() {
+            // スムーズスクロール
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // ホバーエフェクト
+            document.querySelectorAll('.product-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        }
+
+        // UI表示/非表示制御
+        function hideLoading() {
+            document.getElementById('loading').classList.add('hidden');
+        }
+
+        function showError() {
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('error').classList.remove('hidden');
+        }
+
+        function showContent() {
+            document.getElementById('toc').classList.remove('hidden');
+            document.getElementById('main-content').classList.remove('hidden');
+        }
+
+        // ページ読み込み時に実行
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCSV();
+        });
+    </script>
+</body>
+</html>

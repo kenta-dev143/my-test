@@ -1,0 +1,33 @@
+<div class="inner">
+<form class="registration-form" method="post" action="./?exec=pre_save">
+
+<div class="form-group">
+<p class="fact-title">メールアドレス<span>必須</span></p>
+<!-- {* <p class="confirmation_text">{$user_mail|escape}</p> *} -->
+<p class="confirmation_text">{$user_login_id|escape}</p>
+</div>
+<!-- {*
+<span class="form-spacer"></span>
+<div class="form-group">
+<p class="fact-title">確認用メールアドレス<span>必須</span></p>
+<p class="confirmation_text">{$user_mail_chk|escape}</p>
+</div>
+*} -->
+<span class="form-spacer"></span>
+<div class="form-group">
+<p class="fact-title">日本アクセス担当者メールアドレス<span>必須</span></p>
+<p class="confirmation_text">{$admin_mail|escape}</p>
+</div>
+<!-- {*
+<span class="form-spacer"></span>
+<div class="form-group">
+<p class="fact-title">日本アクセス担当者確認用メールアドレス<span>必須</span></p>
+<p class="confirmation_text">{$admin_mail_chk|escape}</p>
+</div>
+*} -->
+<div class="button-area">
+<button type="submit" class="blue-button t-hover"><span>送信する</span></button>
+<button type="button" onclick="location.href='./?exec=pre_back';" class="blue-button back-button t-hover"><span>戻る</span></button>
+</div>
+</form>
+</div>

@@ -1,0 +1,29 @@
+#<IfModule !mpm_winnt.c>
+#<IfModule !hfs_apple_module>
+#    # 処理順
+#    Order deny,allow
+#    # 一旦全NG
+#    deny from All
+#    # allow か Require どちらかの条件にマッチすればOKとする
+#    Satisfy Any
+#
+#    # 許可ホスト名（local）の指定
+#    SetEnvIf HOST "^(localhost|192\.168)" noAuth
+#
+#    # apiはOK
+#    SetEnvIf REQUEST_URI "^/api/" noAuth
+#
+#    # 許可ホストはOK
+#    allow from env=noAuth
+#    # Basic認証
+#    Require valid-user
+#    AuthType Basic
+#    AuthName "Please enter your ID and password"
+#
+#    AuthUserFile /var/www/vhosts/tenjikai.nippon-access.co.jp/.htpasswd
+#</IfModule>
+#</IfModule>
+
+RewriteEngine On
+RewriteRule ^qr_print.pdf$                                       qr_print.php [L,QSA]
+RewriteRule ^qr_link.pdf$                                        qr_link.php [L,QSA]

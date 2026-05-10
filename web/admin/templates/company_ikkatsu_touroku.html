@@ -1,0 +1,65 @@
+<div class="row">
+    <div class="col-md-12">
+        {if $err_msg.0 !=''}
+        <div class="errArea">
+            {foreach from=$err_msg item=msg}
+            {$msg|escape}<br>
+            {/foreach}
+        </div><br>
+        {elseif $success_msg!=""}
+        <div class="successArea">{$success_msg|escape}</div>
+        {/if}
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-user" style="padding:20px;">
+                    <span style="font-weight:bold;">取り込み結果</span>
+                    <hr>
+                    {foreach from=$line_err item=err}
+                    <span style="color:red;">{$err|escape}</span>
+                    {/foreach}
+                    {$success_msg|escape}
+                </div><!-- <div class="card card-user"> -->
+            </div><!-- <div class="col-md-12"> -->
+        </div><!-- <div class="row"> -->
+
+        <div class="card card-user" style="padding:5px;">
+            <table>
+                <tr>
+                    <td style="vertical-align:top;">
+                        <br>
+                        <span style="font-weight:bold;">企業マスタ アップロードCSVレイアウト</span>
+                        {$company_layout}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="vertical-align:top;">
+                        <hr>
+                        <form name="upload_form" action="./" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="page" value="{$page|escape}">
+                            <input type="hidden" name="exec" value="company_csv_upload">
+
+                            <!-- ***************************** -->
+                            <div class="row">
+                                <div class="col-md-4 pl-1">
+                                    <div class="msr_text_01">
+                                        <label>CSVファイル</label>
+                                        <input type="file" name="csv_file">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <button type="submit" class="btn btn-primary-S btn-round" style="width:340px;">一括新規登録用CSVアップロード</button>
+                            </div>
+                            <!-- ***************************** -->
+
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </div><!-- <div class="card card-user"> -->
+    </div><!-- <div class="col-md-12"> -->
+</div><!-- <div class="row"> -->
+

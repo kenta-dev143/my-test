@@ -1,0 +1,149 @@
+
+
+<script>
+ function _regist(exec){
+ document.search_form.exec.value=exec;
+ document.search_form.submit();
+ }
+
+ function _downloadCsv(){
+ document.search_form.exec.value='download_csv';
+ document.search_form.sess_no_init.value = "1"
+ document.search_form.submit();
+ }
+
+ function _uploadCsvSelect() {
+ const fileElem = document.getElementById("file_select");
+ if (fileElem) {
+ fileElem.click();
+ }
+ }
+
+ function _uploadCsv() {
+ document.upload_form.exec.value = 'upload_csv';
+ document.upload_form.submit();
+ }
+</script>
+
+
+<div class="row">
+ <div class="col-md-12">
+ <?php if($err_msg['0'] !=''): ?>
+ <div class="errArea">
+ <?php $__currentLoopData = $err_msg; $this->addLoop($__currentLoopData);$this->getFirstLoop();
+ foreach($__currentLoopData as $msg): $loop = $this->incrementLoopIndices();  ?>
+ <?php echo \htmlentities($msg??'', ENT_QUOTES, 'UTF-8', false); ?><br>
+ <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+ </div><br>
+ <?php if($line_err['0'] !=''): ?>
+ <div class="card card-user" style="padding:20px;">
+
+ <span style="font-weight:bold;">取り込み結果</span>
+ <hr>
+ <?php $__currentLoopData = $line_err; $this->addLoop($__currentLoopData);$this->getFirstLoop();
+ foreach($__currentLoopData as $err): $loop = $this->incrementLoopIndices();  ?>
+ <span style="color:red;"><?php echo \htmlentities($err??'', ENT_QUOTES, 'UTF-8', false); ?></span>
+ <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+ <?php echo \htmlentities($success_msg??'', ENT_QUOTES, 'UTF-8', false); ?>
+
+
+ </div><!-- <div class="card card-user"> -->
+ <?php endif; ?>
+ <?php elseif($success_msg!=""): ?>
+ <div class="successArea"><?php echo nl2br($success_msg); ?></div>
+ <?php endif; ?>
+ <div class="card card-user">
+ <form name="search_form" action="./" method="post">
+ <input type="hidden" name="page" value="<?php echo \htmlentities($page??'', ENT_QUOTES, 'UTF-8', false); ?>">
+ <input type="hidden" name="exec" value="search">
+ <input type="hidden" name="set_pattern" value="<?php echo \htmlentities($set_pattern??'', ENT_QUOTES, 'UTF-8', false); ?>">
+ <input type="hidden" name="sess_no_init" value="">
+
+ <br>
+
+ <div class="row">
+ <div class="col-md-4 pl-1">
+ <div class="msr_text_01">
+ <label>閲覧部署グループ名</label>
+ <input type="text" name="szkgrp_name" value="<?php echo \htmlentities($search_condition['szkgrp_name']??'', ENT_QUOTES, 'UTF-8', false); ?>"  style="width:50%;"/>を含む
+ </div>
+ </div>
+ <div class="col-md-4 pl-1">
+ <div class="msr_text_01">
+ <label>表示状態でフィルタ</label>
+ <select name="hidden_flg">
+ <?php echo blade_html_options(['options' => $select_hidden, 'selected' => $search_condition['hidden_flg']]); ?>
+
+ </select>
+ </div>
+ </div>
+ </div>
+
+ <div class="row">
+ <div class="update ml-auto mr-auto">
+ <button type="button" class="btn btn-primary btn-round" onClick="_regist('search');">検　索</button>
+ <button type="button" class="btn btn-primary btn-round" onClick="location.href='?page=<?php echo \htmlentities($page??'', ENT_QUOTES, 'UTF-8', false); ?>';">リセット</button>
+ </div>
+ </div>
+
+ </form>
+ </div><!-- <div class="card card-user"> -->
+ </div><!-- <div class="col-md-12"> -->
+</div><!-- <div class="row"> -->
+
+<button type="button" onClick="location.href='?page=syozoku_group_edit';" class="btn btn-primary btn-round">新規登録</button>
+<button type="button" onClick="_downloadCsv();" class="btn btn-primary btn-round" style="width:200px;">CSVダウンロード</button>
+<button type="button" onClick="_uploadCsvSelect();" class="btn btn-primary btn-round" style="width:200px;">CSVアップロード</button>
+
+<form name="upload_form" action="./" method="post" enctype="multipart/form-data" id="form_csv_upload">
+ <input type="hidden" name="page" value="<?php echo \htmlentities($page??'', ENT_QUOTES, 'UTF-8', false); ?>">
+ <input type="hidden" name="exec" value="upload_csv">
+ <input type="file" name="csv_file" class="d-none" id="file_select" onchange="_uploadCsv();">
+</form>
+
+<div class="row">
+ <div class="col-md-12">
+ <div class="card">
+ <div class="card-body">
+ <?php if($count==0): ?>
+ <br><br>条件に合うデータがありませんでした。<br><br><br>
+ <?php else: ?>
+ <?php echo $this->runChild('page_navi'); ?>
+ <div class="table-responsive">
+ <table class="table">
+ <thead class=" text-primary">
+ <th style="width:200px;">
+ コード
+ </th>
+ <th style="width:auto;">
+ 閲覧部署グループ名
+ </th>
+ <th style="width: 200px"></th>
+ </thead>
+ <tbody>
+ <?php $__currentLoopData = $main_recs; $this->addLoop($__currentLoopData);$this->getFirstLoop();
+ foreach($__currentLoopData as $rec): $loop = $this->incrementLoopIndices();  ?>
+ <tr>
+ <td>
+ <?php echo \htmlentities($rec['szkgrp_code']??'', ENT_QUOTES, 'UTF-8', false); ?>
+
+ </td>
+ <td>
+ <?php echo \htmlentities($rec['szkgrp_name']??'', ENT_QUOTES, 'UTF-8', false); ?>
+
+ </td>
+ <td>
+ <button type="button" onClick="location.href='?page=syozoku_group_edit&id=<?php echo \htmlentities($rec['szkgrp_id']??'', ENT_QUOTES, 'UTF-8', false); ?>';" class="btn btn-primary btn-round">詳細</button>
+ </td>
+ </tr>
+ <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+ </tbody>
+ </table>
+ </div>
+ <?php echo $this->runChild('page_navi'); ?>
+ <?php endif; ?>
+ </div>
+ </div>
+ </div>
+</div>
+

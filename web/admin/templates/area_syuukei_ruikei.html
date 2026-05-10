@@ -1,0 +1,66 @@
+        <div class="row" style="margin-top:10px;">
+          <div class="col-md-12">
+            <div class="card">
+            {if $select_event_id!=""}
+              {if count($event_syoutai_yotei_ymd_array) > 0}
+              <div class="card-header">
+                <h4 class="card-title">累計期間</h4>
+                <ul class="list-group list-group-horizontal mb-4">
+                  {foreach from=$event_syoutai_yotei_ymd_array item=ymd name=event_syoutai_yotei_ymd}
+                  <li class="h5 my-1">{$ymd|escape}{if !$smarty.foreach.event_syoutai_yotei_ymd.last}、{/if}</li>
+                  {/foreach}
+                </ul>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title">エリア別-入場者数</h4>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead class=" text-primary">
+                      <th>
+                        時刻
+                      </th>
+                      {foreach from=$area_recs item=arec}
+                        <th>{$arec.area_name|escape}</th>
+                      {/foreach}
+                      <th style="color:#ff8888;font-weight:bold;">全エリア</th>
+                    </thead>
+                    <tbody>
+                      {foreach from=$main_recs item=rec}
+                        <tr>
+                          <td>
+                            {$rec.time|escape}
+                          </td>
+                          {foreach from=$area_recs item=arec}
+                          <td>
+                            {$rec[$arec.area_id]|escape}
+                          </td>
+                          {/foreach}
+                          <td style="color:#ff8888;font-weight:bold;">{$rec.all_area|escape}</td>
+                        </tr>
+                      {/foreach}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {else}
+                <div style="padding-left: 5em;">
+                  <br><br><br><br>
+                  <span>イベント管理から(招待者)来場予定日時を設定してください</span>
+                  <br><br>
+                  <button type="button" onClick="location.href='?page=event_edit&id={$select_event_rec.event_id}';" class="btn btn-primary btn-round" style="width:200px;">設定を行う</button>
+                  <br><br><br><br><br>
+                </div>
+              {/if}
+            {else}
+              {include file="$_SYSTEM_ROOT_DIR/admin/templates/parts/select_event.html"}
+            {/if}
+            </div>
+          </div>
+
+        </div>

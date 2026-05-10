@@ -1,0 +1,112 @@
+<script type="text/javascript" src="{$_SYSTEM_ROOT_URLS}/js/ckeditor/ckeditor.js"></script>
+{literal}
+<script>
+
+$(function(){
+  var editor = CKEDITOR.replace( 'mailt_body' );
+});
+
+function _regist(_mode){
+  if(_mode =='delete'){
+    if(window.confirm('本当に削除してもよろしいでしょうか？')){
+      document.form_edit.mode.value=_mode;
+      document.form_edit.submit();
+    }
+  }else{
+    document.form_edit.mode.value=_mode;
+    document.form_edit.submit();
+  }
+}
+
+</script>
+{/literal}
+
+<div class="inner_wrap">
+  {if $err_msg.0 !=''}
+    <div class="errArea">
+      {foreach from=$err_msg item=msg}
+        {$msg|escape}<br>
+      {/foreach}
+    </div><br>
+  {elseif $success_msg!=""}
+    <div class="successArea">{$success_msg|escape}</div>
+  {/if}
+
+  <form name="form_edit" action="./?page={$page|escape}" method="post" onSubmit="return false;">
+  <input type="hidden" name="exec" value="save">
+  <input type="hidden" name="mode">
+  <input type="hidden" name="token" value="{$token|escape}">
+  <input type="hidden" name="mailt_key" value="{$mailt_key|escape}">
+
+    <div class="msr_text_01">
+      <label>テンプレート名</label>
+      <input type="text" name="mailt_name" value="{$mailt_name|escape}" />
+    </div>
+
+    <hr>
+      <span style="color:blue;">
+        <span style="font-weight:bold;">このテンプレートで利用可能なキーワード</span><br>
+        ※件名、本文で下記のキーワードを入力すると説明の内容に変換されて埋め込まれます。
+      </span>
+      <table class="table">
+        <thead class=" text-primary">
+          <th>キーワード</th>
+          <th>説明</th>
+        </thead>
+        <tbody>
+          {if $mailt_system_use_only=="0"}
+            {foreach from=$_conf_mail_template_keywords.common key=keywords item=info}
+              <tr>
+                <div>
+                  <td>
+                    &lt;%{$keywords}%&gt;
+                  </td>
+                  <td>
+                    {$info}
+                  </td>
+                </div>
+              </tr>
+            {/foreach}
+          {/if}
+          {foreach from=$_conf_mail_template_keywords.$mailt_key key=keywords item=info}
+            <tr>
+              <div>
+                <td>
+                  &lt;%{$keywords}%&gt;
+                </td>
+                <td>
+                  {$info}
+                </td>
+              </div>
+            </tr>
+          {/foreach}
+        </tbody>
+      </table>
+    <hr>
+
+    <div class="msr_text_01">
+      <label>件名</label>
+      <input type="text" name="mailt_subject" value="{$mailt_subject|escape}" />
+    </div>
+
+    <div class="msr_textarea_01"">
+      <label>メール本文</label>
+      <textarea id="mailt_body" name="mailt_body">{$mailt_body|escape}</textarea>
+    </div>
+    
+
+    <p class="msr_btn15">
+      {if $mode=='insert'}
+        <a href="javascript:_regist('insert');void(0);">上記内容で新規登録する</a>
+      {else}
+        <a href="javascript:_regist('update');void(0);">上記内容で更新する</a>
+        {if $mailt_delete_fuka != 1}
+          &nbsp;&nbsp;&nbsp;
+          <a href="javascript:_regist('delete');void(0);">削除する</a>
+        {/if}
+      {/if}
+      &nbsp;&nbsp;&nbsp;
+      <a href="javascript:location.href='?page=mail_template_list&sess_no_init=1';void(0);">一覧へ戻る</a>
+    </p>
+  </form>
+</div><!-- <div class="inner_wrap"> -->

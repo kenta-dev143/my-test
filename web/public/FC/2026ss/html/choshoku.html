@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-M4K8JGC8');</script>
+  <!-- End Google Tag Manager -->  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026年春季 フードコンベンション 展示会資料</title>
+  <link rel="stylesheet" href="./styles.css" type="text/css">
+  <style>
+    .pdf-page-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      padding-bottom: 20px;
+    }
+
+    /* PC表示の場合は70% */
+    @media (min-width: 768px) {
+      .pdf-page-img {
+        width: 70%;
+        margin: 0 auto;  /* 中央揃え */
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M4K8JGC8"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <header>
+    <a href="./marketing.html" class="back-button"></a>
+    <h1>2026年春季 展示会資料</h1>
+    <p>株式会社日本アクセス</p>
+  </header>
+
+  <div class="container">
+    <h2>朝食向上委員会（仮） 展示会資料</h2>
+    <a class="pdf-link" href="../pdf/choshoku.pdf" data-event="download_button_click" download="朝食向上委員会(仮).pdf">PDFをダウンロード</a>
+
+    <div class="pdf-viewer">
+      <!-- SVGファイル表示 -->
+      <object type="image/svg+xml" data="../pdf/choshoku01.svg" aria-label="choshoku1"></object>
+      <object type="image/svg+xml" data="../pdf/choshoku02.svg" aria-label="choshoku2"></object>
+      <img src="../pdf/choshoku03.png" alt="choshoku03" class="pdf-page-img">
+      <object type="image/svg+xml" data="../pdf/choshoku04.svg" aria-label="choshoku4"></object>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 株式会社日本アクセス | <a href="https://www.nippon-access.co.jp/">公式サイト</a></p>
+  </footer>
+
+  <!-- スクロールトップボタン -->
+  <button class="scroll-top-btn" id="scrollTopBtn" aria-label="ページの先頭に戻る">↑</button>
+  <script>
+    const scrollTopBtn = document.getElementById('scrollTopBtn');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        scrollTopBtn.classList.add('visible');
+      } else {
+        scrollTopBtn.classList.remove('visible');
+      }
+    });
+    scrollTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>

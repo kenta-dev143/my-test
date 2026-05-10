@@ -1,0 +1,331 @@
+.require-mark {
+	display: inline-block;
+	margin-right: 0.25em;
+	color: rgba(245, 97, 97, 1.00);
+	font-weight: 700 !important;
+}
+
+.form-wrap h5 {
+	display: block;
+	margin-top: 1.5rem;
+	margin-bottom: 1rem;
+	font-size: 1.125rem !important;
+	font-weight: 500;
+}
+
+.form-control {
+	background: white;
+	border: 1px solid rgba(221, 221, 221, 1.00);
+}
+
+.form-control {
+	width: 100%;
+	min-height: 2.875rem;
+	padding: 0rem 0.5rem;
+	line-height: 1.42857143;
+	color: rgba(17, 17, 17, 1.00);
+	margin-top: 0.625rem;
+	margin-bottom: 0.625rem;
+	border-radius: 0.25rem;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	}
+
+.ex {
+	font-size: 0.875rem;
+	line-height: 1.65em;
+	color: rgba(153, 153, 153, 1.00);
+	display: inline-block;
+}
+
+select {
+	height: 2.875rem;
+	line-height: 2.875rem;
+	position: relative;
+	vertical-align: middle;
+}
+
+.input-inline {
+	margin-top: -5px !important;
+	font-size: 1.125rem;
+}
+
+.required {
+	display: inline-block;
+	margin: 0 0 0 0.625rem;
+}
+
+label.small-title {
+	text-align: left;
+	font-weight: 500;
+	margin-bottom: 0.75rem;
+	display: block;
+}
+
+p.conf {
+	font-size: 1.2em;
+	line-height: 1.6em;
+	color: rgba(17, 17, 17, 1.00);
+	font-weight: 400;
+	padding: 0px 30px 10px 30px;
+	margin: 0 0 10px 0;
+	display: block;
+	border-bottom: 1px solid #eee;
+}
+
+.error-wrap {
+	margin-top: 1rem;
+}
+
+.error-wrap ul li {
+	display: block;
+	margin: 1rem 0;
+	font-size: 1.125rem;
+	line-height: 1.65em;
+}
+
+.pull-left {
+	float: left !important;
+	padding-right: 0.75rem;
+}
+
+.error-wrap ul li {
+	color: rgba(217, 94, 94, 1.00);
+}
+
+.form-group {
+	margin-bottom: 1.25rem;
+}
+
+.btn {
+	border-radius: 0.25rem;
+	border: none;
+	background-color: rgba(204, 204, 204, 1.00);
+	color: white;
+	line-height: 2.875rem;
+	font-size: 1.125rem;
+	margin: 0px;
+	padding: 0px 1rem 0px 1rem;
+	height: 2.875rem;
+	width: 100%;
+	overflow: hidden;
+	font-weight: 500;
+}
+
+.submit {
+	background-color: rgba(28, 81, 155, 1.00);
+	color: white !important;
+}
+
+.reset {
+	background-color: #bbb;
+	color: white !important;
+}
+
+.require {
+	color: #af1f24;
+	display: inline-block;
+	margin: 0 0.2em;
+}
+
+.required-i {
+	display: inline-block;
+	margin: 0 0.25rem;
+	font-size: 0.75em;
+	line-height: 1em;
+	vertical-align: text-top;
+}
+
+.under-form {
+	display: block;
+	margin: 1.5rem 0 0 0 !important;
+	line-height: 1.65em !important;
+	font-size: 0.875rem !important;
+}
+
+.error-wrap > ul {
+	padding: 0 0 0 0 !important;
+	margin-bottom: 3rem !important;
+	display: block !important;
+	padding-inline-start: 0 !important;
+}
+
+
+::-moz-placeholder,
+:-ms-input-placeholder ,
+::-webkit-input-placeholder{
+	font-size: 0.875rem !important;
+	color: rgba(238, 238, 238, 1.00) !important;
+	vertical-align: middle;
+}
+::-webkit-input-placeholder{padding-top: 0;}
+
+.button-area {
+	padding: 1rem 0 0 0;
+	text-align: center;
+}
+
+.radio-input {
+	display: none;
+}
+
+.radio-input + label {
+	padding-left: 2rem;
+	position: relative;
+	margin-right: 0.5rem;
+	cursor: pointer;
+	font-size: 1em !important;
+	font-weight: 400 !important;
+	line-height: 1.5rem;
+}
+
+.radio-input + label:first-of-type {
+	margin-left: 0.25rem
+}
+
+.radio-input + label::before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 1.5rem;
+	height: 1.5rem;
+	border: 1px solid rgba(204, 204, 204, 1.00);
+	background-color: white;
+	border-radius: 50%;
+}
+
+.radio-input:checked + label {
+	/*font-weight: 700;*/
+}
+
+.radio-input:checked + label::before {
+	background-color: rgba(28, 81, 155, 1.00);
+	-webkit-transition: 0.3s ease-in-out;
+	-moz-transition: 0.3s ease-in-out;
+	-ms-transition: 0.3s ease-in-out;
+	-o-transition: 0.3s ease-in-out;
+	transition: 0.3s ease-in-out;
+}
+
+.radio-input:checked + label::after {
+	content: "";
+	display: block;
+	position: absolute;
+	width: 1.5rem;
+	height: 1.5rem;
+	text-align: center;
+	color: white;
+	top: 0;
+	left: 0;
+	overflow: hidden;
+	background: url("../images/icon_check.svg") 50% 50% no-repeat;
+	background-size: 90%;
+}
+
+.radio-inline {
+	display: inline-block !important;
+	line-height: 1.5rem;
+}
+
+.radio {
+	margin: 0.75rem auto 0rem auto;
+	padding: 0px auto;
+}
+
+.radio input {
+	display: none;
+}
+
+.radio label {
+	display: inline-block;
+	float: left;
+	cursor: pointer;
+	width: 50%;
+	margin-top: -5px;
+	padding: 0px !important;
+	background-color: rgba(200, 200, 200, 1.00);
+	color: rgba(153, 153, 153, 1.00);
+	text-align: center;
+	line-height: 2.875rem !important;
+	transition: .3s;
+	height: 2.875rem !important;
+	overflow: hidden;
+	font-size: 1rem;
+}
+
+.radio .label-left {
+	border-top: 1px solid rgba(204, 204, 204, 1.00);
+	border-left: 1px solid rgba(204, 204, 204, 1.00);
+	border-bottom: 1px solid rgba(204, 204, 204, 1.00);
+	border-top-left-radius: 3px;
+	border-bottom-left-radius: 3px;
+}
+
+.radio .label-right {
+	border: 1px solid rgba(204, 204, 204, 1.00);
+	border-top-right-radius: 3px;
+	border-bottom-right-radius: 3px;
+}
+
+.radio label:first-of-type {
+	border-radius: 0.25rem 0 0 3px;
+}
+
+.radio label:last-of-type {
+	border-radius: 0 3px 3px 0;
+}
+
+.radio input[type="radio"]:checked + .switch-on {
+	background: rgba(243, 243, 243, 1.00);
+	color: rgba(17, 17, 17, 1.00);
+}
+
+.radio input[type="radio"]:checked + .switch-off {
+	background: rgba(243, 243, 243, 1.00);
+	color: rgba(17, 17, 17, 1.00);
+}
+
+/* BREAK POINT -----------------------------------------------------*/
+@media (max-width: 767px) {
+	label.small-title {
+		text-align: left;
+		margin-bottom: 0.75rem;
+		display: inline-block;
+	}
+
+	.select-wrap {
+		margin-top: 1rem;
+	}
+
+	.btn {
+		margin-bottom: 1rem;
+	}
+
+	.btn:first-of-type {
+		margin-bottom: 0rem !important;
+	}
+
+	.radio-input + label {
+		padding-left: 1.5rem;
+		margin-right: 0.25rem;
+		line-height: 1.25rem;
+	}
+
+	.radio-input + label::before {
+		width: 1.25rem;
+		height: 1.25rem;
+	}
+
+	.radio-input:checked + label::after {
+		width: 1.25rem;
+		height: 1.25rem;
+	}
+
+	.radio-inline {
+		line-height: 1.25rem;
+	}
+	.form-control{font-size: 16px;
+  }
+} /*----------------------------------------------------- BREAK POINT*/

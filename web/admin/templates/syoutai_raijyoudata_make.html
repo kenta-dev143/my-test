@@ -1,0 +1,675 @@
+{literal}
+<script>
+
+function bigCateChange(){
+  var big_cate = $('select[name="syoutai_big_cate"]').val();
+  var mid_cate = $('select[name="syoutai_mid_cate"]').val();
+
+  var html = '';
+  html += '<option value="">選択してください</option>';
+  for (var i = 0; i < midCateArr.length; i++) {
+    var inFlg = false;
+    if(big_cate==''){
+      inFlg = true;
+    }else if(parseInt(big_cate) <= 4){
+      if(midCateArr[i].id < 100){
+        inFlg = true;
+      }
+    }else{
+      if(midCateArr[i].id >= 100){
+        inFlg = true;
+      }
+    }
+    if(inFlg){
+      if(mid_cate==midCateArr[i].id){
+        html += '<option value="'+midCateArr[i].id+'" selected>'+midCateArr[i].name+'</option>';
+      }else{
+        html += '<option value="'+midCateArr[i].id+'">'+midCateArr[i].name+'</option>';
+      }
+    }
+  }
+  $('select[name="syoutai_mid_cate"]').html(html);
+}
+
+function _winAdminOpen(){
+  var event_id = $('select[name="join_event_id"]').val();
+  if (event_id == ''){
+    alert("招待した担当者による検索する場合は、イベントを選択してください。");
+    return;
+  }
+
+  // window.open( './index.php?page=admin_list_select_win&select_event_id='+event_id+'&syoutai_only=1','admin_list_select_win' ,'width=1750, height=800, menubar=no, toolbar=no, scrollbars=yes' );
+  modalDialogOpen( './index.php?page=admin_list_select_win&select_event_id='+event_id+'&syoutai_only=1' );
+}
+
+function _syozokuClcik(){
+  var event_id = $('select[name="join_event_id"]').val();
+  if (event_id == ''){
+    alert("招待した所属グループによる検索をする場合は、イベントを選択してください。");
+    return;
+  }
+}
+
+function _winAdminOpen2(){
+  // window.open( './index.php?page=admin_list_select_win&syoutai_only=1&set_pattern=2','admin_list_select_win' ,'width=1750, height=800, menubar=no, toolbar=no, scrollbars=yes' );
+  modalDialogOpen( './index.php?page=admin_list_select_win&syoutai_only=1&set_pattern=2' );
+}
+
+function _adminSelect(id,busyo,name){
+  $('input[name="join_admin_id"]').val(id);
+  $('#tantousya_lbl').html('<a href="javascript:_tantousyaDel();void(0);" style="color:red;">[×]</a> '+busyo+' '+name+' が担当');
+}
+
+function _adminSelect2(id,busyo,name){
+  $('input[name="user_admin_id"]').val(id);
+  $('#user_admin_lbl').html('<a href="javascript:_tantousyaDel2();void(0);" style="color:red;">[×]</a> '+busyo+' '+name+' が担当');
+}
+
+function _tantousyaDel(){
+  $('input[name="join_admin_id"]').val('');
+  $('#tantousya_lbl').text('');
+}
+
+function _tantousyaDel2(){
+  $('input[name="user_admin_id"]').val('');
+  $('#user_admin_lbl').text('');
+}
+
+function _regist(exec){
+  var admin_id = $('input[name="join_admin_id"]').val();
+  var j_event_id = $('select[name="join_event_id"]').val();
+  var syozoku_id = $('select[name="admin_syozoku_id"]').val();
+
+  if ( admin_id != '' && j_event_id == ''){
+    alert("招待した担当者による検索する場合は、イベントを選択してください。");
+    return;
+  }else if ( syozoku_id != '' && j_event_id == ''){
+    alert("招待した所属グループによる検索をする場合は、イベントを選択してください。");
+    return;
+  }
+  document.search_form.exec.value=exec;
+  document.search_form.submit();
+}
+
+function _registExport(){
+  var select_events = $('#export_events').val();
+
+  if (select_events == '') {
+    alert("一括登録・編集用CSVをエクスポートする場合は、イベントを選択してください。");
+    return;
+  }
+  document.search_form.exec.value='import_csv_download';
+  document.search_form.export_events.value = select_events;
+  document.search_form.submit();
+  $('#eventModal').modal('hide');
+}
+
+function _pageChange(offset){
+  document.form_list.offset.value = offset;
+  document.form_list.submit();
+}
+
+function _gotoDetail(id){
+  document.form_list.exec.value = "gotoDetail";
+  document.form_list.syoutai_id.value = id;
+  document.form_list.submit();
+}
+
+function _userMake(){
+  // 担当者の必須チェック
+  var admin_id = $('input[name="user_admin_id"]').val();
+  if ( admin_id == '' ){
+    alert("イベントに招待する担当者を設定してください。");
+    return;
+  }
+
+  var syoutai_yotei_time = $('input[name="syoutai_yotei_time\\[\\]"]:checked').val();
+  var user_web = $('input[name="user_web"]:checked').val();
+  if ( syoutai_yotei_time === undefined ){
+    syoutai_yotei_time = 0;
+  }
+
+  // 来場予定日時／WEB展示会の必須入力チェック
+  if ( syoutai_yotei_time == 0 && user_web == 0 ){
+    alert("来場予定日時の選択、WEB展示会（ガイドブック）のいずれかを選択して下さい。");
+    return;
+  } else if( syoutai_yotei_time == 0 && user_web == 1){
+    // 来場予定日時が未入力の場合の確認
+    if( !window.confirm('来場日時設定がされていません。来場日時が未設定の場合QRはお客様に表示されません。よろしいですか？') ){
+      return;
+    }
+  }
+
+  // メール通知の確認
+  var mail_tsuuchi = $('input[name="mail_tsuuchi"]:checked').val();
+  if ( mail_tsuuchi === undefined ){
+    mail_tsuuchi = 0;
+  }
+
+  if ( mail_tsuuchi == 1 ){
+    if( !window.confirm('招待者へメールが自動送信されますがよろしいですか？') ){
+      return;
+    }
+  }
+
+  document.form_list.exec.value = "userMake";
+  document.form_list.submit();
+}
+
+function _checkall(){
+  // 全ての質問の値を取得 (true,false)
+  var chkall_flg = $("#id_check_all").prop("checked");
+  // タイトルのクラスに値を設定
+  $(".chks").prop("checked",chkall_flg);
+
+  if (chkall_flg){
+    $ (".hid_chks").val(1);
+  } else {
+    $ (".hid_chks").val(0);
+  }
+}
+
+</script>
+　<br>
+{/literal}
+  {if $err_msg.0 !=''}
+    <div class="errArea">
+      {foreach from=$err_msg item=msg}
+        {$msg|escape}<br>
+      {/foreach}
+    </div><br>
+  {elseif $success_msg!=""}
+    <div class="successArea">{$success_msg|escape}</div>
+  {/if}
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card card-user">
+        <div class="row" style="margin-left:10px;">
+          <div class="col-md-4 pl-1">
+            <div class="msr_pulldown_01" style="width:400px;">
+              <span style="font-weight:bold;color:#cbce51;">登録先来場者データのイベント</span>
+              <div>
+                {$_conf_touroku_event|escape}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="search_div" class="row">
+    <div class="col-md-12">
+      <div class="card card-user">
+
+        <span style="font-weight:bold;color:#51cecb;font-size:18px;">　Step1: 来場対象者の絞り込み</span>
+
+        <form name="search_form" action="./?page={$page|escape}" method="post" onSubmit="return false;">
+          <input type="hidden" name="page" value="{$page|escape}">
+          <input type="hidden" name="exec" value="">
+          <input type="hidden" name="export_events" value="">
+          <input type="hidden" name="t_event_id" value="{$select_event_id|escape}">
+
+          <!-- ***************************** -->
+          <div class="row">
+            <div class="col-md-4 pl-1">
+              <div class="msr_pulldown_01">
+                <label>VIP</label>
+                <select name="syoutai_vip_flg" style="width: 100% !important;">
+                  <option value="">選択してください</option>
+                  {html_options options=$_conf_vip selected=$search_condition.syoutai_vip_flg}
+                </select>
+              </div>
+            </div>
+            <div class="col-md-4 pl-1">
+              <div class="msr_pulldown_01">
+                <label>大分類（業種）</label>
+                <select name="syoutai_big_cate" style="width: 100% !important;" onChange="bigCateChange();">
+                  <option value="">選択してください</option>
+                  {html_options options=$_conf_big_cate_detail selected=$search_condition.syoutai_big_cate}
+                </select>
+              </div>
+            </div>
+            <div class="col-md-4 pl-1">
+              <div class="msr_pulldown_01">
+                <label>中分類（業態）</label>
+                <select name="syoutai_mid_cate" style="width: 100% !important;">
+                  <option value="">選択してください</option>
+                  {html_options options=$_conf_mid_cate selected=$search_condition.syoutai_mid_cate}
+                </select>
+              </div>
+            </div>
+          </div>
+          <!-- ***************************** -->
+
+          <div class="row">
+            <div class="col-md-4 pl-1">
+              <div class="msr_text_01">
+                <label>企業名(マスタ)</label>
+
+                <!-- {* ****************** 企業フィルター ****************** *} -->
+                <input type="text" name="company_filter" placeholder="選択肢をフィルター" onKeyup="companyFilter();">
+                <select id="hidden_company_id_select" style="display:none;">
+                  <option value="">選択してください</option>
+                  {html_options options=$_conf_company selected=$search_condition.syoutai_company_id}
+                </select>
+                {literal}
+                <script>
+                  function companyFilter(){
+                    var filter = $('input[name="company_filter"]').val();
+                    if(filter==''){
+                      $('select[name="syoutai_company_id"]').html( $("#hidden_company_id_select").html() );
+                    }else{
+                      $('select[name="syoutai_company_id"]').html('');
+                      $('select[name="syoutai_company_id"]').append($("<option>").val('').text( '選択してください' ));
+                      $("#hidden_company_id_select option").each(function(i){
+                        if($(this).text().indexOf(filter) != -1){
+                          $('select[name="syoutai_company_id"]').append($("<option>").val($(this).val()).text( $(this).text() ));
+                        }
+                      });
+                    }
+                  }
+                </script>
+                {/literal}
+                <!-- {* ****************** /企業フィルター ****************** *} -->
+                <br>
+                <select name="syoutai_company_id" style="width:460px;">
+                  <option value="">選択してください</option>
+                  {html_options options=$_conf_company selected=$search_condition.syoutai_company_id}
+                </select>
+
+              </div>
+            </div>
+
+            <div class="col-md-4 pl-1">
+              <div class="msr_text_01">
+                <label>企業名</label>
+                <input type="text" name="syoutai_kigyou_name" value="{$search_condition.syoutai_kigyou_name|escape}" style="width:50%;" />を含む
+              </div>
+            </div>
+
+            <div class="col-md-4 pl-1">
+              <div class="msr_text_01">
+                <label>企業名カナ</label>
+                <input type="text" name="syoutai_kigyou_name_kana" value="{$search_condition.syoutai_kigyou_name_kana|escape}" style="width:50%;" />を含む
+              </div>
+            </div>
+
+            <!-- {* <div class="col-md-4 pl-1">
+              <div class="msr_text_01">
+                <label>SANSANID</label>
+                <input type="text" name="syoutai_sansan_id" value="{$search_condition.syoutai_sansan_id|escape}" style="width:50%;" />を含む
+              </div>
+            </div> *} -->
+          </div>
+
+          <!-- ***************************** -->
+          <div class="row">
+            <div class="col-md-4 pl-1">
+              <div class="msr_text_01">
+                <label>氏名</label>
+                <input type="text" name="syoutai_name" value="{$search_condition.syoutai_name|escape}"  style="width:50%;"/>を含む
+              </div>
+            </div>
+
+            <div class="col-md-4 pl-1">
+              <div class="msr_text_01">
+                <label>氏名カナ</label>
+                <input type="text" name="syoutai_name_kana" value="{$search_condition.syoutai_name_kana|escape}"  style="width:50%;"/>を含む
+              </div>
+            </div>
+
+            <div class="col-md-4 pl-1">
+              <div class="msr_text_01">
+                <label>メールアドレス(PC)</label>
+                <input type="text" name="syoutai_mail" value="{$search_condition.syoutai_mail|escape}" style="width:50%;" />を含む
+              </div>
+            </div>
+          </div>
+
+          <!-- ***************************** -->
+          <div class="row">
+            <div class="col-md-4 pl-1">
+              <div class="msr_pulldown_01" style="width:500px;">
+                <label>招待したイベントと担当者と所属</label><br>
+                <select name="join_event_id" style="width:300px;">
+                  <option value="">選択してください</option>
+                  {html_options options=$_conf_join_event selected=$search_condition.join_event_id}
+                </select><br>
+
+                <label>招待した担当者<span class="searchBtn" style="margin-left:10px;" onClick="_winAdminOpen();"></span></label>
+                <span id="tantousya_lbl">{if $search_condition.admin_name!=""}<a href="javascript:_tantousyaDel();void(0);" style="color:red;">[×]</a> {$search_condition.syozoku_name|escape}&nbsp;{$search_condition.admin_name|escape} が担当{/if}</span>
+                <input type="hidden" name="join_admin_id" value="{$search_condition.join_admin_id|escape}">
+
+                <br>
+                <table>
+                  <tr>
+                    <td style="width:90px;vertical-align:top;">
+                      <label>招待した<br>支店・部署</label>
+                    </td>
+                    <td style="vertical-align:top;">
+                      <input type="text" name="syozoku_filter" placeholder="選択肢をフィルター" onKeyup="syozokuFilter();">
+                      <!-- {* ****************** 所属フィルター ****************** *} -->
+                      <select id="hidden_syozoku_id_select" style="display:none;">
+                        <option value="">選択してください</option>
+                        {html_options options=$_conf_syozoku selected=$search_condition.admin_syozoku_id}
+                      </select>
+                      {literal}
+                      <script>
+                        function syozokuFilter(){
+                          var filter = $('input[name="syozoku_filter"]').val();
+                          if(filter==''){
+                            $('select[name="admin_syozoku_id"]').html( $("#hidden_syozoku_id_select").html() );
+                          }else{
+                            $('select[name="admin_syozoku_id"]').html('');
+                            $('select[name="admin_syozoku_id"]').append($("<option>").val('').text( '選択してください' ));
+                            $("#hidden_syozoku_id_select option").each(function(i){
+                              if($(this).text().indexOf(filter) != -1){
+                                $('select[name="admin_syozoku_id"]').append($("<option>").val($(this).val()).text( $(this).text() ));
+                              }
+                            });
+                          }
+                        }
+                      </script>
+                      {/literal}
+                      <!-- {* ****************** /所属フィルター ****************** *} -->
+                      <select name="admin_syozoku_id" style="width:300px;" onClick="_syozokuClcik();">
+                        <option value="">選択してください</option>
+                        {html_options options=$_conf_syozoku selected=$search_condition.admin_syozoku_id}
+                      </select><br>の所属グループ
+                    </td>
+                  </tr>
+                </table>
+
+                <br>
+
+                <table>
+                  <tr>
+                    <td style="width:90px;vertical-align:top;">
+                      <label>招待した<br>所属グループ</label>
+                    </td>
+                    <td style="vertical-align:top;">
+                      <input type="text" name="syozoku_group_filter" placeholder="選択肢をフィルター" onKeyup="syozokuGroupFilter();">
+                      <!-- {* ****************** 所属フィルター ****************** *} -->
+                      <select id="hidden_syozoku_group_id_select" style="display:none;">
+                        <option value="">選択してください</option>
+                        {html_options options=$_conf_syozoku_group selected=$search_condition.admin_syozoku_group_id}
+                      </select>
+                      {literal}
+                      <script>
+                        function syozokuGroupFilter(){
+                          var filter = $('input[name="syozoku_group_filter"]').val();
+                          if(filter==''){
+                            $('select[name="admin_syozoku_group_id"]').html( $("#hidden_syozoku_group_id_select").html() );
+                          }else{
+                            $('select[name="admin_syozoku_group_id"]').html('');
+                            $('select[name="admin_syozoku_group_id"]').append($("<option>").val('').text( '選択してください' ));
+                            $("#hidden_syozoku_group_id_select option").each(function(i){
+                              if($(this).text().indexOf(filter) != -1){
+                                $('select[name="admin_syozoku_group_id"]').append($("<option>").val($(this).val()).text( $(this).text() ));
+                              }
+                            });
+                          }
+                        }
+                      </script>
+                      {/literal}
+                      <!-- {* ****************** /所属フィルター ****************** *} -->
+                      <select name="admin_syozoku_group_id" style="width:300px;" onClick="_syozokuClcik();">
+                        <option value="">選択してください</option>
+                        {html_options options=$_conf_syozoku_group selected=$search_condition.admin_syozoku_group_id}
+                      </select><br>の所属グループ
+                    </td>
+                  </tr>
+                </table>
+
+              </div>
+
+            </div>
+            <div class="col-md-4 pl-1">
+              <label>招待者</label>
+              <div class="msr_radio_01">
+                  <input type="checkbox" class="largechkbox" name="not_include_invited" id="not_include_invited" value="1" {if $search_condition.not_include_invited=="1"}checked{/if}>
+                  <label for="not_include_invited">招待していない招待者のみ</label>
+              </div>
+            </div>
+            <div class="col-md-4 pl-1">
+              <div class="msr_text_01">
+                <label>タグ文字列（来場者マスタ）</label>
+                <input type="text" name="syoutai_tag" value="{$search_condition.syoutai_tag|escape}" style="width:50%;"/>を含む
+              </div>
+            </div>
+
+          </div>
+
+          <!-- ***************************** -->
+          <div class="row">
+            <div class="col-md-3 pl-1">
+              <div class="msr_pulldown_01">
+                <label>並び順</label>
+                <select name="order_by">
+                  <option value="">選択してください</option>
+                  {html_options options=$order_by_arr selected=$search_condition.order_by}
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="update ml-auto">
+              <button type="button" class="btn btn-primary-S btn-round" onClick="_regist('search');">検　索</button>
+              <button type="button" class="btn btn-primary-S btn-round" onClick="location.href='?page=syoutai_raijyoudata_make';">リセット</button>
+              {if $login.admin_master_kengen == 1}
+              <button type="button" class="btn btn-primary-S btn-round" style="width:300px;" onClick="_regist('csv_download');">上記条件でCSVダウンロード</button>
+              {/if}
+            </div>
+          </div>
+        </form>
+      </div><!-- <div class="card card-user"> -->
+    </div><!-- <div class="col-md-12"> -->
+  </div><!-- <div class="row"> -->
+
+{if $login.admin_master_kengen == 1}
+<button type="button" class="btn btn-primary-S btn-round" data-toggle="modal" data-target="#eventModal" style="width:340px;">【一括登録・編集用】CSVダウンロード</button>
+<button type="button" onClick="location.href='?page=syoutai_raijyoudata_ikkatsu_touroku';" class="btn btn-primary btn-round" style="width:340px;">【一括登録・編集用】CSVアップロード</button>
+{/if}
+
+  <form name="form_list" action="./?page={$page|escape}" method="post" onSubmit="return false;" style="padding:0;">
+    <input type="hidden" name="exec" value="list">
+    <input type="hidden" name="offset" value="">
+    <input type="hidden" name="syoutai_id" value="">
+
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <span style="font-weight:bold;color:#51cecb;font-size:18px;">　Step2: 来場対象者の選択</span>
+          {if $search_condition.not_include_invited=="1"}
+          <p style="font-weight:bold;margin:10px 0 0 10px">まだ招待していない招待者の一覧</p>
+          {else}
+          <p style="font-weight:bold;margin:10px 0 0 10px">招待済みを含めた招待者の一覧</p>
+          {/if}
+          <div class="card-body">
+            {if $count==0}
+              <br><br>条件に合うデータがありませんでした。<br><br><br>
+            {else}
+              {include file="$_SYSTEM_ROOT_DIR/admin/templates/page_navi_post.html"}
+              <div class="table-responsive">
+                <table class="table">
+                  <thead class="text-primary-S">
+                    <tr>
+                      <th style="text-align:center;">全てをﾁｪｯｸ<br><input type="checkbox" id="id_check_all" class="largechkbox" onClick="_checkall();"></th>
+                      <th>大分類</th>
+                      <th>企業名</th>
+                      <th>部署</th>
+                      <th>役職</th>
+                      <th>氏名</th>
+                      <th>所属</th>
+                      <th>担当者</th>
+                      <th style="padding-left:25px;">　 詳細</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {foreach from=$main_recs item=rec name=loop}
+                    <tr>
+                      <td style="text-align:center;">
+                        {if $rec.user_syoutai_id == ''}
+                        &nbsp;
+                        <input type="checkbox" name="chks[]" class="chks largechkbox" onClick="if(this.checked) $('#syoutai_chks_{$smarty.foreach.loop.index}').val('1'); else  $('#syoutai_chks_{$smarty.foreach.loop.index}').val('0')"  value="{$rec.syoutai_id|escape}" {$rec.checked}>
+                        <input type="hidden" name="syoutai_chks[]" class="hid_chks" id="syoutai_chks_{$smarty.foreach.loop.index}" value="{if $rec.checked==""}0{else}1{/if}" {$rec.checked}>
+                        <input type="hidden" name="syoutai_ids[]" value="{$rec.syoutai_id|escape}" {$rec.checked}>
+                        {else}
+                        招待済
+                        {/if}
+                      </td>
+                      <td>
+                        {$rec.disp_big_cate|escape}
+                      </td>
+                      <td>
+                        {if empty($rec.syoutai_company_id)}
+                          {$rec.syoutai_kigyou_name|escape}
+                        {else}
+                          {$rec.syoutai_company_name|escape}
+                        {/if}
+                      </td>
+                      <td>
+                        {$rec.syoutai_busyo|escape}
+                      </td>
+                      <td>
+                        {$rec.syoutai_yakusyoku|escape}
+                      </td>
+                      <td>
+                        {$rec.syoutai_name|escape}
+                      </td>
+                      <td>
+                        {$rec.syozoku_name|escape}
+                      </td>
+                      <td>
+                        {$rec.admin_name|escape}
+                      </td>
+                      <td>
+                        <!-- <{* button type="button" onClick="location.href='?page=syoutai_edit&id={$rec.syoutai_id|escape}&from_page={$page|escape}';" class="btn btn-primary-S btn-round">詳細</button> *} -->
+                        <button type="button" onClick="_gotoDetail('{$rec.syoutai_id|escape}');" class="btn btn-primary-S btn-round">詳細</button>
+                      </td>
+                    </tr>
+                  {/foreach}
+                  </tbody>
+                </table>
+              </div>
+              {include file="$_SYSTEM_ROOT_DIR/admin/templates/page_navi_post.html"}
+            {/if}
+          </div>
+        </div><!-- <div class="card"> -->
+      </div><!-- <div class="col-md-12"> -->
+    </div><!-- <div class="row"> -->
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card card-user">
+
+          <span style="font-weight:bold;color:#51cecb;font-size:18px;">　Step3: 担当者の選択</span>
+
+          <div class="row" style="margin:2px 10px 0;">
+            <div class="col-md-4 pl-1">
+              <label>イベントに招待する担当者<span class="searchBtn" style="margin-left:10px;" onClick="_winAdminOpen2();"></span></label><br>
+              <span id="user_admin_lbl">{if $user_admin_name!=""}<a href="javascript:_tantousyaDel2();void(0);" style="color:red;">[×]</a> {$user_syozoku_name|escape}&nbsp;{$user_admin_name|escape} で招待する{/if}</span>
+              <input type="hidden" name="user_admin_id" value="{$user_admin_id|escape}">
+            </div>
+            <br>
+            <div class="col-md-4 pl-1">
+              <div class="msr_text_01">
+                <label>タグ文字列（来場者マスタ）</label>
+                <input type="text" name="user_tag" value="{$user_tag|escape}" />
+              </div>
+            </div>
+          </div>
+
+          <span style="font-weight:bold;color:#51cecb;font-size:18px;">　Step4: 来場予定日時の選択</span>
+
+          <div class="col-md-4 pl-1" style="margin:2px 10px 10px;">
+            <!-- {* <label>来場予定日時</label> *} -->
+            <!-- {* <td style="vertical-align:top;"> *} -->
+              <!-- {* {foreach from=$_conf_syoutai_yotei_time key=ymd item=info} *} -->
+                <!-- {* <p class="syoutai" style="margin-bottom:0px;">{$info.disp_ymd|escape}</p> *} -->
+                <!-- {* 　 *} -->
+                <!-- {* {foreach from=$info.his item=hi_info} *} -->
+                  <!-- {* <input class="syoutai_chk largechkbox" type="checkbox" name="syoutai_yotei_time[]" value="{$ymd|escape} {$hi_info.hi|escape}" {$hi_info.checked|escape} id="syoutai_{$ymd|replace:"/":""}{$hi_info.hi|escape}" /> *} -->
+                  <!-- {* <label class="syoutai" for="syoutai_{$ymd|replace:"/":""}{$hi_info.hi|escape}">{$hi_info.hi|escape}&nbsp;</label> *} -->
+                <!-- {* {/foreach} *} -->
+              <!-- {* {/foreach} *} -->
+            <td style="vertical-align:top;">
+              <div class="col-md-4 pl-1" style="margin-left:20px;">
+                {html_checkboxes name="syoutai_yotei_time" options=$_conf_syoutai_yotei_time2 selected=$user_raijyou_yotei_time|escape separator='<br>'}
+              </div>
+            </td>
+          </div>
+
+          <span style="font-weight:bold;color:#51cecb;font-size:18px;">　Step5: WEB展示会（ガイドブック）<br>
+          　<span style="font-weight:normal;font-size:small;color:red;">【注意】WEB展示会（ガイドブック）は東日本FCと西日本FCのみ実施します。閲覧を希望する場合は、東日本FC・西日本FCのイベントを選択してご招待ください。<br>大分類が「小売、外食」以外の方を招待する場合は「WEB展示会（ガイドブック）招待」は固定で「招待しない」になるため、来場予定日時の選択が必要です。</span></span>
+          <!-- {* <span style="font-weight:normal;font-size:small;color:red;">※WEB展示会（ガイドブック）への招待は、上記来場予定者には自動付帯となります</span></span> *} -->
+          <div class="row" style="margin:2px 10px 10px 30px;">
+            <div class="col-md-4 pl-1">
+              {html_radios name="user_web" options=$_conf_user_web_radio selected=$user_web|escape}
+            </div>
+          </div>
+
+
+          <span style="font-weight:bold;color:#51cecb;font-size:18px;">　Step6: メール通知の指定</span>
+
+          <div class="row" style="margin:2px 10px 10px 30px;">
+            <div class="col-md-4 pl-1">
+              <label for="mail_tsuuchi">
+                {if $login.admin_syuukei_etsuran_kengen=="0"}
+                  <input type="checkbox" name="mail_tsuuchi" class="largechkbox" value="1" {if $mail_tsuuchi=="1"}checked{/if} id="mail_tsuuchi" />マイページ設定URLを
+                  <select name="mail_timing">
+                    <option value="now" {if $mail_timing!="ato"}selected{/if} >今すぐ</option>
+                    <option value="ato" {if $mail_timing=="ato"}selected{/if} >後から</option>
+                  </select>
+                  メール通知する
+                {else}
+                  <input type="checkbox" name="mail_tsuuchi" class="largechkbox" value="1" {if $mail_tsuuchi=="1"}checked{/if} id="mail_tsuuchi" />マイページ設定URLをメール通知する
+                  <input type="hidden" name="mail_timing" value="now">
+                {/if}
+              </label>
+            </div>
+          </div>
+
+          <span style="font-weight:bold;color:#51cecb;font-size:18px;">　Step7: 招待の実行</span>
+
+          <div class="row">
+            <div class="update _ml-auto _mr-auto">
+              <button type="button" style="width:400px;margin-left:60px;" class="btn btn-primary-S btn-round" onClick="_userMake();">上記内容でチェックした来場者を招待する</button>
+            </div>
+          </div>
+        </div><!-- <div class="card card-user"> -->
+      </div><!-- <div class="col-md-12"> -->
+    </div><!-- <div class="row"> -->
+  </form>
+
+<!-- Modal -->
+<div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="eventModalLabel">エクスポート対象イベント選択</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="msr_pulldown_01">
+          <label>イベント</label>
+          <select id="export_events" name="export_events[]" style="width:360px; height: 200px;" multiple="multiple">
+            <option value="">選択してください</option>
+            {html_options options=$_conf_events selected=$_conf_selected_events}
+          </select>
+          <p class="small">※Ctrlキーで複数選択できます</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" style="width:160px;" data-dismiss="modal">キャンセル</button>
+        <button type="button" class="btn btn-primary" style="width:160px;" onClick="_registExport();">ダウンロード</button>
+      </div>
+    </div>
+  </div>
+</div>

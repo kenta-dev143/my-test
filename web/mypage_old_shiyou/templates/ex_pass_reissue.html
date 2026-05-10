@@ -1,0 +1,26 @@
+<div class="inner">
+    {if $err_msg.0 !=''}
+      {foreach from=$err_msg item=msg}
+        <span style="color:red;">{$msg|escape}</span><br>
+      {/foreach}
+    {elseif $success_msg!=""}
+      <div class="successArea">
+        <div>{$success_msg|escape}</div>
+      </div>
+    {/if}
+
+<form class="login-form"  action="./?page={$page}" method="post">
+<input type="hidden" name="exec" value="send">
+<input type="hidden" name="page" value="{$page}">
+
+<div class="form-group">
+<label for="loginid" class="fact-title">ログインID（メールアドレス）</label>
+<input type="text" class="form-control" name="login_id" value="{$login_id|escape}" id="loginid" aria-describedby="emailHelp" placeholder="ログイン ID（Ｅメールアドレス）" novalidate="novalidate">
+</div>
+<div class="button-area">
+<button type="submit" name="login" value="1" class="blue-button t-hover"><span>送 信</span></button>
+</div>
+</form>
+<br>
+<a href="./">マイページログイン画面へ戻る</a>
+</div>

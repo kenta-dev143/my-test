@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>{$event_rec.event_name|escape}-ご来場予定</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../../css/style.css">
+
+{literal}
+<script>
+function qr_disp(uid,eid){
+  var url = '../../qr_print.pdf?user_id='+uid+'&event_id='+eid;
+  var top = window.innerHeight / 2;
+  var left = window.innerWidth / 2;
+  window.open(url, 'qr_disp', 'top=' + top + ',left=' + left + ',width=1000,height=1000');
+}
+</script>
+{/literal}
+
+</head>
+
+<body class="c2">
+
+<header>
+  {include file="$_SYSTEM_ROOT_DIR/mypage/templates/mypage_header.html"}
+</header>
+
+<div class="inner_wrap">
+
+
+  {if $err_msg.0 !=''}
+      <div class="errArea">
+          {foreach from=$err_msg item=msg}
+              {$msg|escape}<br>
+          {/foreach}
+      </div><br>
+  {elseif $success_msg!=""}
+      <div class="successArea">{$success_msg}</div>
+  {/if}
+
+  <form name="form_edit" action="./?page={$page}" method="post" onSubmit="return false;">
+  <input type="hidden" name="exec" value="save">
+  <input type="hidden" name="token" value="{$token|escape}">
+
+    <h1 class="msr_h103">QRコード</h1>
+    <div class="msr_radio_01">
+      <img src="{$_SYSTEM_ROOT_URLS}/qr_disp.php?uid={$user_id|escape}&eid={$event_rec.event_id|escape}" /><br>
+      　{$qr_code|escape}
+      <p class="msr_btn15">
+        <a href="javascript:qr_disp('{$user_id|escape}','{$event_rec.event_id|escape}');void(0);">印刷用QRコード表示</a>
+      </p>
+    </div>
+
+    <h1 class="msr_h103">ご来場予定日時（{$event_rec.event_kaijyou_name|escape}）</h1>
+    {if $login.user_big_cate <= 4}
+      <div>
+        <div class="col-md-4 pl-1" style="margin:10px 0 20px 20px;">
+          {foreach from=$_conf_raijyou_yotei_time2 item=ymd_hi}
+            <label>
+              <input type="radio" name="syoutai_yotei_time" value="{$ymd_hi|escape}" {if $user_raijyou_yotei_time==$ymd_hi}checked{else}disabled{/if}>
+              {$ymd_hi|escape}
+            </label><br>
+          {/foreach}
+        </div>
+      </div>
+    {else}
+      <div class="msr_radio_01">
+        {foreach from=$_conf_raijyou_yotei_time key=ymd item=info}
+          <p class="raijyou" style="margin-bottom:0px;">{$info.disp_ymd|escape}</p>
+          　
+          {foreach from=$info.his item=hi_info}
+            <input class="raijyou_chk" type="checkbox" name="raijyou_yotei_time[]" value="{$ymd|escape} {$hi_info.hi|escape}" {$hi_info.checked|escape} id="raijyou_{$ymd|replace:"/":""}{$hi_info.hi|escape}" {if $login.user_big_cate != 7}disabled='disabled'{/if}>
+            <label  class="raijyou" for="raijyou_{$ymd|replace:"/":""}{$hi_info.hi|escape}">{$hi_info.hi|escape}&nbsp;</label>
+          {/foreach}
+        {/foreach}
+      </div>
+    {/if}
+
+    {if $login.user_big_cate == 7}
+    <p class="msr_btn15">
+      <a href="javascript:document.form_edit.submit();void(0);" style="width:300px;">ご来場予定日時を上記内容で変更する</a>
+    </p>
+
+    <br>
+    {/if}
+
+    <h1 class="msr_h103">{$event_rec.event_exhibition_name|escape}招待</h1>
+    <div class="msr_radio_01">
+      {if $user_web=="1"}ご招待しています{else}ご招待していません{/if}
+    </div>
+
+  </form>
+
+</div>
+<!--/#contents-->
+
+<footer>
+
+<div id="copyright">
+<small>Copyright (c) NIPPON ACCESS, INC. All rights reserved.</small>
+</div>
+
+</footer>
+
+</body>
+</html>

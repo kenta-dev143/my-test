@@ -1,0 +1,29 @@
+  <div class="inner">
+  <h1 id="logo">
+    {if $direct_login==""}<a href="./">{/if}<img src="../../images/logo.png" alt="日本アクセス">{if $direct_login==""}</a>{/if}</h1>
+    <br>{$event_rec.event_name|escape}<span class="kaijyouNmae">({$event_rec.event_kaijyou_name|escape})</span>
+  <div class="header_right">
+    {if $direct_login==""}
+        {if $init_pass_change==""}
+            <a class="Logout" href="?page=login&exec=logout" style="width:120px;text-align:center;">ログアウト</a>
+            <a class="Logout" href="./" style="width:120px;text-align:center;">マイページTOP</a>
+        {else}
+          {if $user_raijyou_yotei_time!=""}
+              <a class="Logout" href="./">ログイン画面</a>
+          {/if}
+        {/if}
+    {/if}
+  </div>
+  </div>
+  <div class="header_right_sp">
+    {if $direct_login==""}
+        {if $init_pass_change==""}
+            <a class="Logout" href="?page=login&exec=logout" style="width:70px;padding-left:5px;padding-right:5px;line-height:30px;text-align:center;font-size:10px;">ログアウト</a>
+            <a class="Logout" href="./" style="width:70px;padding-left:5px;padding-right:5px;line-height:30px;text-align:center;font-size:10px;">マイページTOP</a>
+        {else}
+          {if $user_raijyou_yotei_time!=""}
+              <a class="Logout" href="./">ログイン画面</a>
+          {/if}
+        {/if}
+    {/if}
+  </div>

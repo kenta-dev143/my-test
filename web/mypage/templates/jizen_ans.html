@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>{$event_rec.event_name|escape}-事前アンケート</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../../css/style.css">
+
+{literal}
+<script>
+  function _ans(ans){
+    document.form_edit.ans.value = ans;
+    document.form_edit.submit();
+  }
+</script>
+{/literal}
+
+</head>
+
+<body class="c2">
+
+<header>
+  {include file="$_SYSTEM_ROOT_DIR/mypage/templates/mypage_header.html"}
+</header>
+
+<div class="inner_wrap">
+
+
+
+
+    <h1 class="msr_h103">事前アンケート</h1>
+    <div class="msr_radio_01">
+      {if $exec=="save"}
+           アンケートご回答にご協力いただき誠にありがとございました。<br>
+      {elseif $kaitou_ok == true}
+        {$login.user_name|escape} 様<br>
+        日本アクセス {$event_rec.event_name|escape}<br>
+        入場時の健康状態のご確認<br>
+        <br>
+        新型コロナウイルス感染拡大に伴い、入場者管理対策のため、下記ご回答に関しましてご理解を賜り、ご協力のほどお願い申し上げます。<br>
+        <br>
+        【ご質問】<br>
+        現在の健康状況について、下記ご確認の上、該当なし・ありを押して下さい。<br>
+        <br>
+        <span style="font-weight:bold;font-size:30px;line-height: 1.3;">
+          過去1４日以内に発熱（37.5度以上）及び、せき、鼻汁・喉の痛み・倦怠感などの症状
+        </span><br>
+        <span>※なお、ワクチン接種後の副反応と思われる場合（接種後に症状が出現し、2日以内に改善した場合）を除く。</span><br>
+        <br>
+        <p style="font-weight:bold;font-size:30px;text-align:center;line-height: 1.3;">
+          現在の健康状況に問題なければ<br><span style="color:red;text-decoration: underline;">「該当なし」を押してください</span>
+        </p>
+        <br>
+        <form name="form_edit" action="./?page=jizen_ans&ymd={$ymd|escape}" method="post" onSubmit="return false;">
+        <input type="hidden" name="exec" value="save">
+        <input type="hidden" name="ans" value="">
+          {if $kizon_kaitou!=""}
+            <br><span style="font-size:30px;">{$kizon_kaitou|escape}</span><br>
+          {/if}
+          <p style="width:200px;margin:20px auto;"><img src="../../images/arrow.png" alt=""></p>
+          <ul class="Venue-btn_2" id="ans" style="text-align: center;">
+            <li class="Venue-btn_2_01" onclick="_ans('y');"><a href="javascript:void(0);" style="font-size: 30px">上記の症状<br><span style="font-size:40px;">該当 <span style="color:red;font-size:50px;">なし</span></span></a></li>
+            <li class="Venue-btn_2_02" onclick="_ans('n');"><a href="javascript:void(0);" style="font-size: 30px">上記の症状<br><span style="font-size:40px;">該当 <span style="color:red;font-size:50px;">あり</span></span></a></li>
+          </ul>
+        </form>
+        <div style="float:right;">{$now_date_and_time|escape}</div><br>
+        　
+      {else}
+          事前アンケートはご来場当日にご回答できます。<br>
+          ご来場当日にご回答ください。<br>
+          <br>
+          イベント：{$event_rec.event_name|escape}<br>
+          {if $event_rec.event_kaisai_ymd_st==$event_rec.event_kaisai_ymd_ed}
+            開催日：{$event_rec.event_kaisai_ymd_st|escape}
+          {else}
+            開催期間：{$event_rec.event_kaisai_ymd_st|escape}〜{$event_rec.event_kaisai_ymd_ed|escape}
+          {/if}
+      {/if}
+    </div>
+
+
+</div>
+<!--/#contents-->
+
+<footer>
+
+<div id="copyright">
+<small>Copyright (c) NIPPON ACCESS, INC. All rights reserved.</small>
+</div>
+
+</footer>
+
+</body>
+</html>

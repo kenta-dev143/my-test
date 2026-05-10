@@ -1,0 +1,14 @@
+<div class="row" style="padding: 50px; text-align: center;">
+  <div class="col-md-12" >
+    <p style="font-size: 180%">イベントを選択してください</p>
+  </div>
+  <div class="col-md-12">
+    <form name="sel_eve_form2" method="post" style="padding:0;">
+      <input type="hidden" name="eve_chg" value="1">
+      <select name="select_event_id" onChange="document.sel_eve_form2.submit();" style="margin-top:4px;">
+        <option value="">イベントを選択してください</option>
+        {html_options options=$_conf_puldown_event selected=$select_event_id}
+      </select>
+    </form>
+  </div>
+</div>

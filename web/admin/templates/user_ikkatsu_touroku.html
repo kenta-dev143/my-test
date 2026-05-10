@@ -1,0 +1,143 @@
+      <div class="row" style="margin-top:10px;">
+        <div class="col-md-12">
+
+  {if $err_msg.0 !=''}
+      <div class="errArea">
+          {foreach from=$err_msg item=msg}
+              {$msg|escape}<br>
+          {/foreach}
+      </div><br>
+  {elseif $success_msg!=""}
+      <div class="successArea">{$success_msg|escape}</div>
+  {/if}
+
+      <div class="row">
+        <div class="col-md-12">
+
+          <div class="card card-user" style="padding:20px;">
+
+                <span style="font-weight:bold;">取り込み結果</span>
+                <hr>
+                {foreach from=$line_err item=err}
+                  <span style="color:red;">{$err|escape}</span>
+                {/foreach}
+                {$success_msg|escape}
+
+          </div><!-- <div class="card card-user"> -->
+
+        </div><!-- <div class="col-md-12"> -->
+
+      </div><!-- <div class="row"> -->
+
+          <div class="card card-user" style="padding:5px;">
+            <table>
+              <tr>
+                <!--
+                <td style="vertical-align:top;">
+                    <br>
+                    <span style="font-weight:bold;">招待者アップロードCSVレイアウト</span>
+                    {$syoutai_layout}
+                </td>
+                -->
+                <td style="vertical-align:top;">
+                    <br>
+                    <span style="font-weight:bold;">来場者アップロードCSVレイアウト</span>
+                    {$raijyou_layout}
+                </td>
+              </tr>
+              <tr>
+                <!--
+                <td style="vertical-align:top;">
+                    <button type="button" onClick="location.href='./?page={$page}&exec=syoutai_tpl_download';" class="btn btn-primary btn-round" style="width:450px;">(招待者)一括新規登録用CSVテンプレートダウンロード</button>
+                </td>
+                -->
+                <td style="vertical-align:top;">
+                    <button type="button" onClick="location.href='./?page={$page}&exec=raijyou_tpl_download';" class="btn btn-primary btn-round" style="width:450px;">(来場者)一括新規登録用CSVテンプレートダウンロード</button>
+                </td>
+              </tr>
+              <tr>
+                <!--
+                <td style="vertical-align:top;">
+                    <hr>
+                    <form name="upload_form" action="./" method="post" enctype="multipart/form-data">
+
+                      <input type="hidden" name="page" value="{$page|escape}">
+                      <input type="hidden" name="exec" value="syoutai_csv_upload">
+                    
+                      <div class="row">
+                        <div class="col-md-4 pl-1">
+                          <div class="msr_text_01">
+                            <label>タグ付け文字列</label>
+                            <input type="text" name="user_tag" value="{$user_tag|escape}" style="width:50%;" />
+                          </div>
+                        </div>
+
+                      </div>
+
+                      <div class="row">
+                        <div class="col-md-4 pl-1">
+                          <div class="msr_text_01">
+                            <label>CSVファイル</label>
+                            <input type="file" name="csv_file">
+                          </div>
+                        </div>
+                        
+                      </div>
+
+
+
+                      <div class="row">
+                          <button type="submit" class="btn btn-primary btn-round" style="width:340px;">(招待者)アップロードして一括新規登録</button>
+                      </div>
+
+                    </form>
+                </td>
+                -->
+
+                <td style="vertical-align:top;">
+                    <hr>
+                    <form name="upload_form" action="./" method="post" enctype="multipart/form-data">
+
+                      <input type="hidden" name="page" value="{$page|escape}">
+                      <input type="hidden" name="exec" value="raijyou_csv_upload">
+                    
+                      <!-- ***************************** -->
+                      <div class="row">
+                        <div class="col-md-4 pl-1">
+                          <div class="msr_text_01">
+                            <label>タグ付け文字列</label>
+                            <input type="text" name="user_tag2" value="{$user_tag2|escape}" style="width:50%;" />
+                          </div>
+                        </div>
+
+                      </div>
+
+                      <div class="row">
+                        <div class="col-md-4 pl-1">
+                          <div class="msr_text_01">
+                            <label>CSVファイル</label>
+                            <input type="file" name="csv_file">
+                          </div>
+                        </div>
+                        
+                      </div>
+
+
+
+                      <div class="row">
+                        <!-- <div class="update ml-auto mr-auto"> -->
+                          <button type="submit" class="btn btn-primary btn-round" style="width:340px;">(来場者)アップロードして一括新規登録</button>
+                        <!-- </div> -->
+                      </div>
+
+                    </form>
+                </td>
+              </tr>
+            </table>
+
+          </div><!-- <div class="card card-user"> -->
+
+        </div><!-- <div class="col-md-12"> -->
+
+      </div><!-- <div class="row"> -->
+

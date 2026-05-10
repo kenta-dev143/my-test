@@ -1,0 +1,345 @@
+@verbatim
+<script>
+function _regist(_mode){
+    if(_mode =='delete') {
+        if (window.confirm('本当に削除してもよろしいでしょうか？')) {
+            document.form_edit.mode.value = _mode;
+            document.form_edit.submit();
+        }
+    }else if (_mode == 'archive') {
+        if (window.confirm('アーカイブしてもよろしいでしょうか？')) {
+            document.form_edit.mode.value = _mode;
+            document.form_edit.submit();
+        }
+    }else{
+        document.form_edit.mode.value=_mode;
+        document.form_edit.submit();
+    }
+}
+
+</script>
+@endverbatim
+
+<div class="inner_wrap">
+  @if($err_msg['0'] !='')
+    <div class="errArea">
+      @foreach($err_msg as $msg)
+        {{ $msg }}<br>
+       @endforeach
+    </div><br>
+  @elseif($success_msg!="")
+    <div class="successArea">{!! $success_msg !!}</div>
+   @endif
+
+  <form name="form_edit" action="./?page={{ $page }}" method="post" onSubmit="return false;">
+  <input type="hidden" name="exec" value="save">
+  <input type="hidden" name="mode">
+  <input type="hidden" name="token" value="{{ $token }}">
+  <input type="hidden" name="id" value="{{ $id }}">
+
+    <div class="msr_text_01">
+      <label style="font-weight:bold;">イベント名</label>
+      <input type="text" name="event_name" value="{{ $event_name }}" />
+    </div>
+
+    <div class="msr_text_01">
+      <label style="font-weight:bold;">イベント地域識別ID</label>
+      <!-- {{-- <input type="text" name="event_area_shikibetsu_id" value="{{ $event_area_shikibetsu_id }}" style="width:50px;" />（QRコードの１桁目に利用される文字で "W" や "E" など） --}} -->
+      <select name="event_area_shikibetsu_id">
+        <option value=""></option>
+        {!! blade_html_options(['options' => $_wrk_event_area_shikibetsu_id, 'selected' => $event_area_shikibetsu_id]) !!}
+      </select>
+    </div>
+
+    <div class="msr_text_01">
+      <label style="font-weight:bold;">管理画面タイトル背景色</label>
+      <input type="color" name="event_title_bgcolor" value="{{ $event_title_bgcolor }}" style="width:100px;" />
+    </div>
+
+
+    <div class="msr_text_01">
+      <label style="font-weight:bold;">プルダウン用イベント名</label>
+      <input type="text" name="event_pulldown_name" value="{{ $event_pulldown_name }}" />
+    </div>
+
+    <div class="msr_text_01">
+      <label style="font-weight:bold;">プルダウン表示</label>
+      <select name="event_pulldown_disp_flg">
+        {!! blade_html_options(['options' => $_conf_pulldown_disp, 'selected' => $event_pulldown_disp_flg]) !!}
+      </select>
+    </div>
+
+    <div class="msr_text_01">
+      <label style="font-weight:bold;">会場名</label>
+      <input type="text" name="event_kaijyou_name" value="{{ $event_kaijyou_name }}" />
+    </div>
+
+    <!-- {{-- 2021/06/02 Add ** Start *** --}} -->
+    <div class="msr_text_01">
+      <label style="font-weight:bold;">WEB展示会名称</label>
+      <input type="text" name="event_exhibition_name" value="{{ $event_exhibition_name }}" />
+    </div>
+    <!-- {{-- 2021/06/02 Add ** Start *** --}} -->
+
+    <div class="msr_text_01" style="width:100%;">
+      <label style="font-weight:bold;">マイページ等のURL用Key（w2021fc-s など）</label>
+      {!! $_SYSTEM_ROOT_URLS !!}/mypage/<input type="text" name="event_url_key" value="{{ $event_url_key }}" onkeyup="$('#urlkey').text(this.value);$('#urlkey2').text(this.value);$('#urlkey3').text(this.value);" style="width:130px;" />/　(マイページ)<br>
+      {!! $_SYSTEM_ROOT_URLS !!}/visit/<span id="urlkey">{{ $event_url_key }}</span>/　(入退場管理)<br>
+      {!! $_SYSTEM_ROOT_URLS !!}/signup/<span id="urlkey2">{{ $event_url_key }}</span>/　(WEB展示会ｻｲﾝｱｯﾌﾟ)<br>
+      {!! $_SYSTEM_ROOT_URLS !!}/s-signup/<span id="urlkey3">{{ $event_url_key }}</span>/　(招待者ｻｲﾝｱｯﾌﾟ)<br>
+      {!! $_SYSTEM_ROOT_URLS !!}/r-signup/<span id="urlkey3">{{ $event_url_key }}</span>/　(出展社ｻｲﾝｱｯﾌﾟ)<br>
+      {!! $_SYSTEM_ROOT_URLS !!}/k-signup/<span id="urlkey3">{{ $event_url_key }}</span>/　(関係者ｻｲﾝｱｯﾌﾟ)<br>
+      {!! $_SYSTEM_ROOT_URLS !!}/u-signup/<span id="urlkey3">{{ $event_url_key }}</span>/　(運営サポート・施工業ｻｲﾝｱｯﾌﾟ)
+    </div>
+
+    <!-- {{-- 2021/05/25 Add ** Start *** --}} -->
+    <div class="msr_text_01" style="width:100%;">
+      <label style="font-weight:bold;">exhibition(WEB展示会（ガイドブック）)のURL用Key（west2021s など）</label>
+      {!! $_SYSTEM_ROOT_URLS !!}/exhibition/<input type="text" name="event_exhibition_url_key" value="{{ $event_exhibition_url_key }}" style="width:130px;" />/<br>
+    </div>
+    <!-- {{-- 2021/05/25 Add ** End *** --}} -->
+
+    <div class="msr_text_01" style="width:100%;">
+      <label style="font-weight:bold;">開催期間（yyyy/mm/dd形式で指定）</label>
+      <input type="text" name="event_kaisai_ymd_st" value="{{ $event_kaisai_ymd_st }}" style="width:100px;" class="datepicker" />
+      〜
+      <input type="text" name="event_kaisai_ymd_ed" value="{{ $event_kaisai_ymd_ed }}" style="width:100px;" class="datepicker" />
+    </div>
+
+    <div class="msr_text_01" style="width:100%;">
+      <label style="font-weight:bold;">来場管理期間（yyyy/mm/dd形式で指定）</label>
+      <input type="text" name="event_raikainri_ymd_st" value="{{ $event_raikainri_ymd_st }}" style="width:100px;" class="datepicker" />
+      〜
+      <input type="text" name="event_raikainri_ymd_ed" value="{{ $event_raikainri_ymd_ed }}" style="width:100px;" class="datepicker" />
+    </div>
+
+    <div class="msr_text_01" style="width:100%;">
+      <label style="font-weight:bold;">来場日時登録(r-signup)受付期間</label>
+      （開始）<br>
+      日付：
+      <input type="text" name="event_rsignup_start_ymd" value="{{ $event_rsignup_start_ymd }}" style="width:100px;" class="datepicker" />
+      　時刻：
+      <select name="event_rsignup_start_hh">
+        <option value=""></option>
+        {!! blade_html_options(['options' => $_conf_hh, 'selected' => $event_rsignup_start_hh]) !!}
+      </select>
+      時
+      <select name="event_rsignup_start_ii">
+        <option value=""></option>
+        {!! blade_html_options(['options' => $_conf_mm, 'selected' => $event_rsignup_start_ii]) !!}
+      </select>
+      分<br>
+      （終了）<br>
+      日付：
+      <input type="text" name="event_rsignup_end_ymd" value="{{ $event_rsignup_end_ymd }}" style="width:100px;" class="datepicker" />
+      　時刻：
+      <select name="event_rsignup_end_hh">
+        <option value=""></option>
+        {!! blade_html_options(['options' => $_conf_hh, 'selected' => $event_rsignup_end_hh]) !!}
+      </select>
+      時
+      <select name="event_rsignup_end_ii">
+        <option value=""></option>
+        {!! blade_html_options(['options' => $_conf_mm, 'selected' => $event_rsignup_end_ii]) !!}
+      </select>
+      分<br>
+    </div>
+
+    <div class="msr_text_01" style="width:100%;">
+      <label style="font-weight:bold;">
+        (招待者)来場予定日時
+        <br><span style="color:red;">※「参加しない」等の選択肢を追加する場合は日付欄には「2999/01/01」を入力してください。</span><!-- {{-- 2021/07/08 Add --}} -->
+      </label>
+
+      <!-- <input type="text" name="event_syoutai_yotei_time" value="{{ $event_syoutai_yotei_time }}" /> -->
+      <table border="1">
+      <tr>
+      <td style="background-color:#ffdddd;">日付</td>
+        <td style="text-align:center;"><input type="text" name="syoutai_ymd_0" value="{{ $syoutai_ymd_0 }}" style="width:100px;" class="datepicker" /></td>
+        <td style="text-align:center;"><input type="text" name="syoutai_ymd_1" value="{{ $syoutai_ymd_1 }}" style="width:100px;" class="datepicker" /></td>
+        <td style="text-align:center;"><input type="text" name="syoutai_ymd_2" value="{{ $syoutai_ymd_2 }}" style="width:100px;" class="datepicker" /></td>
+        <td style="text-align:center;"><input type="text" name="syoutai_ymd_3" value="{{ $syoutai_ymd_3 }}" style="width:100px;" class="datepicker" /></td>
+        <td style="text-align:center;"><input type="text" name="syoutai_ymd_4" value="{{ $syoutai_ymd_4 }}" style="width:100px;" class="datepicker" /></td>
+      </tr>
+
+      <tr>
+      <td style="background-color:#ffdddd;">時間帯</td>
+        <td style="text-align:center;">
+            <input type="text" name="syoutai_time_0_0" value="{{ $syoutai_time_0_0 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_0_1" value="{{ $syoutai_time_0_1 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_0_2" value="{{ $syoutai_time_0_2 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_0_3" value="{{ $syoutai_time_0_3 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_0_4" value="{{ $syoutai_time_0_4 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_0_5" value="{{ $syoutai_time_0_5 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_0_6" value="{{ $syoutai_time_0_6 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_0_7" value="{{ $syoutai_time_0_7 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_0_8" value="{{ $syoutai_time_0_8 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_0_9" value="{{ $syoutai_time_0_9 }}" style="width:130px;" />
+        </td>
+        <td style="text-align:center;">
+            <input type="text" name="syoutai_time_1_0" value="{{ $syoutai_time_1_0 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_1_1" value="{{ $syoutai_time_1_1 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_1_2" value="{{ $syoutai_time_1_2 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_1_3" value="{{ $syoutai_time_1_3 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_1_4" value="{{ $syoutai_time_1_4 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_1_5" value="{{ $syoutai_time_1_5 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_1_6" value="{{ $syoutai_time_1_6 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_1_7" value="{{ $syoutai_time_1_7 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_1_8" value="{{ $syoutai_time_1_8 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_1_9" value="{{ $syoutai_time_1_9 }}" style="width:130px;" />
+        </td>
+        <td style="text-align:center;">
+            <input type="text" name="syoutai_time_2_0" value="{{ $syoutai_time_2_0 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_2_1" value="{{ $syoutai_time_2_1 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_2_2" value="{{ $syoutai_time_2_2 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_2_3" value="{{ $syoutai_time_2_3 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_2_4" value="{{ $syoutai_time_2_4 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_2_5" value="{{ $syoutai_time_2_5 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_2_6" value="{{ $syoutai_time_2_6 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_2_7" value="{{ $syoutai_time_2_7 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_2_8" value="{{ $syoutai_time_2_8 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_2_9" value="{{ $syoutai_time_2_9 }}" style="width:130px;" />
+        </td>
+        <td style="text-align:center;">
+            <input type="text" name="syoutai_time_3_0" value="{{ $syoutai_time_3_0 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_3_1" value="{{ $syoutai_time_3_1 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_3_2" value="{{ $syoutai_time_3_2 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_3_3" value="{{ $syoutai_time_3_3 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_3_4" value="{{ $syoutai_time_3_4 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_3_5" value="{{ $syoutai_time_3_5 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_3_6" value="{{ $syoutai_time_3_6 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_3_7" value="{{ $syoutai_time_3_7 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_3_8" value="{{ $syoutai_time_3_8 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_3_9" value="{{ $syoutai_time_3_9 }}" style="width:130px;" />
+        </td>
+        <td style="text-align:center;">
+            <input type="text" name="syoutai_time_4_0" value="{{ $syoutai_time_4_0 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_4_1" value="{{ $syoutai_time_4_1 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_4_2" value="{{ $syoutai_time_4_2 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_4_3" value="{{ $syoutai_time_4_3 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_4_4" value="{{ $syoutai_time_4_4 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_4_5" value="{{ $syoutai_time_4_5 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_4_6" value="{{ $syoutai_time_4_6 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_4_7" value="{{ $syoutai_time_4_7 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_4_8" value="{{ $syoutai_time_4_8 }}" style="width:130px;" />
+            <input type="text" name="syoutai_time_4_9" value="{{ $syoutai_time_4_9 }}" style="width:130px;" />
+        </td>
+      </tr>
+
+      </table>
+    </div>
+
+    <div class="msr_text_01" style="width:100%;">
+      <label style="font-weight:bold;">
+        (来場者)来場予定日時
+        <br><span style="color:red;">※「参加しない」等の選択肢を追加する場合は日付欄には「2999/01/01」を入力してください。</span><!-- {{-- 2021/07/08 Add --}} -->
+      </label>
+      <!-- <input type="text" name="event_raijyou_yotei_time" value="{{ $event_raijyou_yotei_time }}" /> -->
+      <table border="1">
+      <tr>
+      <td style="background-color:#ffdddd;">日付</td>
+        <td style="text-align:center;"><input type="text" name="raijyou_ymd_0" value="{{ $raijyou_ymd_0 }}" style="width:100px;" class="datepicker" /></td>
+        <td style="text-align:center;"><input type="text" name="raijyou_ymd_1" value="{{ $raijyou_ymd_1 }}" style="width:100px;" class="datepicker" /></td>
+        <td style="text-align:center;"><input type="text" name="raijyou_ymd_2" value="{{ $raijyou_ymd_2 }}" style="width:100px;" class="datepicker" /></td>
+        <td style="text-align:center;"><input type="text" name="raijyou_ymd_3" value="{{ $raijyou_ymd_3 }}" style="width:100px;" class="datepicker" /></td>
+        <td style="text-align:center;"><input type="text" name="raijyou_ymd_4" value="{{ $raijyou_ymd_4 }}" style="width:100px;" class="datepicker" /></td>
+      </tr>
+
+      <tr>
+      <td style="background-color:#ffdddd;">時間帯</td>
+        <td style="text-align:center;">
+            <input type="text" name="raijyou_time_0_0" value="{{ $raijyou_time_0_0 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_0_1" value="{{ $raijyou_time_0_1 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_0_2" value="{{ $raijyou_time_0_2 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_0_3" value="{{ $raijyou_time_0_3 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_0_4" value="{{ $raijyou_time_0_4 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_0_5" value="{{ $raijyou_time_0_5 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_0_6" value="{{ $raijyou_time_0_6 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_0_7" value="{{ $raijyou_time_0_7 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_0_8" value="{{ $raijyou_time_0_8 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_0_9" value="{{ $raijyou_time_0_9 }}" style="width:130px;" />
+        </td>
+        <td style="text-align:center;">
+            <input type="text" name="raijyou_time_1_0" value="{{ $raijyou_time_1_0 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_1_1" value="{{ $raijyou_time_1_1 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_1_2" value="{{ $raijyou_time_1_2 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_1_3" value="{{ $raijyou_time_1_3 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_1_4" value="{{ $raijyou_time_1_4 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_1_5" value="{{ $raijyou_time_1_5 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_1_6" value="{{ $raijyou_time_1_6 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_1_7" value="{{ $raijyou_time_1_7 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_1_8" value="{{ $raijyou_time_1_8 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_1_9" value="{{ $raijyou_time_1_9 }}" style="width:130px;" />
+        </td>
+        <td style="text-align:center;">
+            <input type="text" name="raijyou_time_2_0" value="{{ $raijyou_time_2_0 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_2_1" value="{{ $raijyou_time_2_1 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_2_2" value="{{ $raijyou_time_2_2 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_2_3" value="{{ $raijyou_time_2_3 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_2_4" value="{{ $raijyou_time_2_4 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_2_5" value="{{ $raijyou_time_2_5 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_2_6" value="{{ $raijyou_time_2_6 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_2_7" value="{{ $raijyou_time_2_7 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_2_8" value="{{ $raijyou_time_2_8 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_2_9" value="{{ $raijyou_time_2_9 }}" style="width:130px;" />
+        </td>
+        <td style="text-align:center;">
+            <input type="text" name="raijyou_time_3_0" value="{{ $raijyou_time_3_0 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_3_1" value="{{ $raijyou_time_3_1 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_3_2" value="{{ $raijyou_time_3_2 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_3_3" value="{{ $raijyou_time_3_3 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_3_4" value="{{ $raijyou_time_3_4 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_3_5" value="{{ $raijyou_time_3_5 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_3_6" value="{{ $raijyou_time_3_6 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_3_7" value="{{ $raijyou_time_3_7 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_3_8" value="{{ $raijyou_time_3_8 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_3_9" value="{{ $raijyou_time_3_9 }}" style="width:130px;" />
+        </td>
+        <td style="text-align:center;">
+            <input type="text" name="raijyou_time_4_0" value="{{ $raijyou_time_4_0 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_4_1" value="{{ $raijyou_time_4_1 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_4_2" value="{{ $raijyou_time_4_2 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_4_3" value="{{ $raijyou_time_4_3 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_4_4" value="{{ $raijyou_time_4_4 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_4_5" value="{{ $raijyou_time_4_5 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_4_6" value="{{ $raijyou_time_4_6 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_4_7" value="{{ $raijyou_time_4_7 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_4_8" value="{{ $raijyou_time_4_8 }}" style="width:130px;" />
+            <input type="text" name="raijyou_time_4_9" value="{{ $raijyou_time_4_9 }}" style="width:130px;" />
+        </td>
+      </tr>
+
+      </table>
+    </div>
+
+    <div class="msr_text_01">
+      <label style="font-weight:bold;">比較イベント</label>
+      <select name="event_compare_event_id">
+        <option value=""></option>
+        {!! blade_html_options(['options' => $compare_events, 'selected' => $event_compare_event_id]) !!}
+      </select>
+    </div>
+
+    <p class="msr_btn15">
+      @if($mode=='insert')
+        <a href="javascript:_regist('insert');void(0);">上記内容で新規登録する</a>
+       @else 
+        <a href="javascript:_regist('update');void(0);">上記内容で更新する</a>
+        &nbsp;&nbsp;&nbsp;
+        <a href="javascript:_regist('delete');void(0);">削除する</a>
+        &nbsp;&nbsp;&nbsp;
+        @if($event_archived_flg != '0')
+        <a href="#" style="pointer-events: none; background-color: grey">アーカイブ済み</a>
+        @elseif(blade_date_format($event_kaisai_ymd_ed, '%Y-%m-%d') >= date('%Y-%m-%d'))
+        <a href="#" style="pointer-events: none; background-color: grey">アーカイブする</a>
+         @else 
+        <a href="javascript:_regist('archive');void(0);">アーカイブする</a>
+         @endif
+       @endif
+      &nbsp;&nbsp;&nbsp;
+      <a href="javascript:location.href='?page=event_list&sess_no_init=1';void(0);">一覧へ戻る</a>
+    </p>
+
+  </form>
+
+</div>

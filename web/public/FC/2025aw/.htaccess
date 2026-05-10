@@ -1,0 +1,10 @@
+Order Allow,Deny
+Allow from all
+
+#AuthUserfile /var/www/vhosts/tenjikai.nippon-access.co.jp/public/.htpasswd
+#AuthGroupfile /dev/null
+#AuthName "Please enter your ID and password"
+#AuthType Basic
+#require valid-user
+
+RewriteEngine Off

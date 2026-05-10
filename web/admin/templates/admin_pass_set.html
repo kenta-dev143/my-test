@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>展示会来場者管理システム-{$contents_title|escape}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+<link href="css/bootstrap.min.css" rel="stylesheet" />
+<link href="css/paper-dashboard.css?v=2.0.1" rel="stylesheet" />
+<link type="text/css" href="./js/jquery-ui/jquery-ui.css" rel="stylesheet">
+<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui/jquery-ui.js"></script>
+<script type="text/javascript" src="js/jquery-ui/datepicker-ja.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+</head>
+
+<body class="c2">
+
+  <div class="inner_wrap">
+  {if $err_msg.0 !=''}
+    <div class="errArea">
+      {foreach from=$err_msg item=msg}
+        {$msg|escape}<br>
+      {/foreach}
+    </div><br>
+  {elseif $success_msg!=""}
+    <div class="successArea">{$success_msg}</div>
+  {/if}
+
+  {if $init_pass_change==""}
+    <form name="form_edit" action="./?page={$page}" method="post" onSubmit="return false;">
+    <input type="hidden" name="exec" value="save">
+    <input type="hidden" name="setpw" value="{$setpw}">
+    <input type="hidden" name="token" value="{$token|escape}">
+
+      <h1 class="msr_h103">パスワード変更</h1>
+
+      <div class="msr_text_01">
+        <label>新規パスワード</label>
+        <input type="password" name="new_user_pass" value="{$new_user_pass|escape}" />
+      </div>
+      <div class="msr_text_01">
+        <label>新規パスワード(確認用)</label>
+        <input type="password" name="new_user_pass_chk" value="{$new_user_pass_chk|escape}" />
+      </div>
+
+      <p class="msr_btn15">
+        <a href="javascript:document.form_edit.submit();void(0);" style="width:260px;">　パスワードを上記内容で変更する</a>
+      </p>
+      <br><br>
+    </form>
+  {else}
+    <p class="msr_btn15">
+      <a href="?page=login&exec=logout">展示会 管理画面へ</a>
+    </p>
+    <br><br>
+  {/if}
+
+  <footer>
+    <div id="copyright">
+      <small>Copyright (c) NIPPON ACCESS, INC. All rights reserved. (Server:{$server_info|escape})</small>
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+{literal}
+<script>
+function _regist( mode ){
+  if ( mode == "clear" ){
+    $('input[name=admin_mail2]').val('');
+  }
+  document.form_edit.submit();
+}
+
+</script>
+{/literal}
+
+<div class="inner_wrap">
+  {if $err_msg.0 !=''}
+      <div class="errArea">
+          {foreach from=$err_msg item=msg}
+              {$msg|escape}<br>
+          {/foreach}
+      </div><br>
+  {elseif $success_msg!=""}
+      <div class="successArea">{$success_msg|escape}</div>
+  {/if}
+
+  <form name="form_edit" action="./?page={$page|escape}" method="post" onSubmit="return false;">
+  <input type="hidden" name="exec" value="save">
+  <input type="hidden" name="token" value="{$token|escape}">
+  <input type="hidden" name="id" value="{$id|escape}">
+
+    <div class="msr_text_01">
+      <label>通知先メールアドレス１<br>(ログインID)</label>
+      <span style="font-weight:bold;">{$admin_mail|escape|default:"なし"}</span>
+    </div>
+
+    <div class="msr_text_01">
+      <label>通知先メールアドレス２</label>
+      <input type="text" name="admin_mail2" value="{$admin_mail2|escape}" />
+    </div>
+
+    <p class="msr_btn15">
+      <a href="javascript:_regist('save');void(0);">設定する</a>
+      {if $admin_mail2 != ''}
+        &nbsp;&nbsp;&nbsp;
+        <a href="javascript:_regist('clear');void(0);">解除する</a>
+      {/if}
+    </p>
+
+  </form>
+
+</div>

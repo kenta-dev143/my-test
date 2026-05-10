@@ -1,0 +1,93 @@
+{literal}
+<script>
+  $(window).on('load', function() {
+    setTimeout(function(){
+      location.reload();
+    },30000);
+  });
+</script>
+{/literal}
+        <div class="row" style="margin-top:10px;">
+          <div class="col-md-12">
+            <div class="card">
+            {if $select_event_id!=""}
+              <form name="form_list" action="?page=area_syuukei" method="post">
+              <input type="hidden" name="exec" value="search">
+                <div class="msr_pulldown_01">
+                  <h4 class="card-title">日付</h4>
+                  <select name="select_ymd" onchange="document.form_list.submit();">
+                    {html_options options=$select_ymd_arr selected=$search_condition.select_ymd}
+                  </select>
+                </div>
+              </form>
+
+              <div class="card-header">
+                <h4 class="card-title">エリア別-滞在者数 (※30秒自動更新)</h4>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead class=" text-primary">
+                      {foreach from=$area_recs item=arec}
+                        <th>{$arec.area_name|escape}</th>
+                      {/foreach}
+                      <th style="color:#ff8888;font-weight:bold;">全エリア</th>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        {foreach from=$taizai_recs item=rec}
+                          <td {if $rec.cnt > $rec.max}style="color:red;"{/if}>
+                            {$rec.cnt|escape} / {$rec.max|escape} 
+                          </td>
+                        {/foreach}
+                        <td style="color:#ff8888;font-weight:bold;">{$all_area_cnt|escape} / {$all_area_max|escape}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {if $login.admin_syuukei_etsuran_kengen != 1}
+              <div class="card-header">
+                <h4 class="card-title">エリア別-入場者数</h4>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead class=" text-primary">
+                      <th>
+                        時刻
+                      </th>
+                      {foreach from=$area_recs item=arec}
+                        <th>{$arec.area_name|escape}</th>
+                      {/foreach}
+                      <th style="color:#ff8888;font-weight:bold;">全エリア</th>
+                    </thead>
+                    <tbody>
+                      {foreach from=$main_recs item=rec}
+                        <tr>
+                          <td>
+                            {$rec.time|escape}
+                          </td>
+                          {foreach from=$area_recs item=arec}
+                          <td>
+                            {$rec[$arec.area_id]|escape}
+                          </td>
+                          {/foreach}
+                          <td style="color:#ff8888;font-weight:bold;">{$rec.all_area|escape}</td>
+                        </tr>
+                      {/foreach}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              {/if}
+            {else}
+              {include file="$_SYSTEM_ROOT_DIR/admin/templates/parts/select_event.html"}
+            {/if}
+            </div>
+          </div>
+
+
+
+        </div>

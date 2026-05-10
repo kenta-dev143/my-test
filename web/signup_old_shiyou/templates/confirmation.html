@@ -1,0 +1,58 @@
+<div class="inner">
+<form class="registration-form" method="post" action="./?exec=save">
+
+<div class="form-group">
+<div class="row">
+  <div class="col-6">
+    <p class="fact-title">姓<span>必須</span></p>
+    <p class="confirmation_text">{$user_name_sei|escape}</p>
+  </div>
+  <div class="col-6">
+    <p class="fact-title">名<span>必須</span></p>
+    <p class="confirmation_text">{$user_name_mei|escape}</p>
+  </div>
+</div>
+</div>
+<span class="form-spacer"></span>
+<div class="form-group">
+<p class="fact-title">会社名<span>必須</span></p>
+<p class="confirmation_text">{$user_kigyou_name|escape}</p>
+</div>
+<span class="form-spacer"></span>
+<div class="form-group">
+<p class="fact-title">業種<span>必須</span></p>
+<p class="confirmation_text">{$disp_user_big_cate|escape}</p>
+</div>
+<span class="form-spacer"></span>
+<div class="form-group">
+  <div class="row">
+    <div class="col-6">
+      <p class="fact-title">部署<span>必須</span></p>
+      <p class="confirmation_text">{$user_busyo|escape}</p>
+    </div>
+    <div class="col-6">
+      <p class="fact-title">役職 任意</p>
+      <p class="confirmation_text">{$user_yakusyoku|escape}</p>
+    </div>
+  </div>
+</div>
+<!-- {* <span class="form-spacer"></span>
+<div class="form-group">
+<p class="fact-title">パスワード<span>必須</span></p>
+<span class="note_text">※半角英数6～12文字以内</span>
+<p class="confirmation_text">{$user_pass|escape}</p>
+</div> *} -->
+<!-- {*
+<span class="form-spacer"></span>
+<div class="form-group">
+<p class="fact-title">確認のためもう一度入力してください。<span>必須</span></p>
+<span class="note_text">※半角英数6～12文字以内</span>
+<p class="confirmation_text">abcd0123</p>
+</div>
+*} -->
+<div class="button-area">
+<button type="submit" class="blue-button t-hover"><span>送信する</span></button>
+<button type="button" onclick="location.href='./?exec=regist_back';" class="blue-button back-button t-hover"><span>戻る</span></button>
+</div>
+</form>
+</div>

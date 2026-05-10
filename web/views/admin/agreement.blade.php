@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>展示会来場者管理システム - 個人情報の取り扱いについて</title class="login">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="js/jquery-ui/jquery-ui.js"></script>
+  <script type="text/javascript" src="js/jquery-ui/datepicker-ja.js"></script>
+  @verbatim
+  <style>
+  .loginTitle {
+      max-width: 800px;
+      padding: 0px 50px 0px 50px;
+      background: #0370c0;
+      box-shadow: 2px 2px 10px #ccc;
+      height: 40px;
+      margin:50px auto 0px auto;
+      display: block;
+      text-align:center;
+      color:white;
+      font-size:20px;
+  }
+
+  .agreebtn {
+    padding:10px 22px;
+    border-radius:30px;
+    margin-top:20px;
+  }
+
+  </style>
+  <script>
+    function _submit(){
+      if ( $("#id_agreement").prop("checked") === false ){
+        alert('個人情報の取り扱いについてご同意頂ける場合は、チェックボックスにチェックをいれてください。');
+        return;
+      }
+      document.edit_form.submit();
+    }
+  </script>
+  @endverbatim
+  </head>
+
+  <body class="c2">
+    <header>
+      <div class="inner">
+        <h1 id="logo"><a href="./"><img src="images/logo.png" alt="日本アクセス"></a></h1>
+      </div>
+    </header>
+
+    <div class="loginTitle">
+      個人情報の取り扱いについて
+    </div>
+
+    <div class="inner_wrap_mapage" style="margin-top:0px;">
+      @if($err_msg['0'] !='')
+        @foreach($err_msg as $msg)
+          <span style="color:red;">{{ $msg }}</span><br>
+         @endforeach
+       @endif
+
+      <form name="edit_form" action="index.php" method="post">
+        <input type="hidden" name="page" value="{{ $page }}">
+        <input type="hidden" name="exec" value="agree">
+
+        <div style="width:750px;height:600px;overflow:auto;border:1px solid #000000;">
+          @include('tpl.agreement')
+        </div>
+
+        <div class="button-panel" style="margin-top:20px;text-align: center;">
+          <input type="checkbox" id="id_agreement" name="agreement" value="1">
+          <label for="id_agreement">&nbsp;本システムを利用する際、上記の「個人情報の取り扱いについて」遵守します</label>
+          <input type="button" class="agreebtn button" style="width:200px;" onclick="_submit();" value="同意する" ></input>
+        </div>
+      </form>
+    </div>
+
+    <footer>
+      <div id="copyright">
+        <small>Copyright (c) NIPPON ACCESS, INC. All rights reserved.</small>
+      </div>
+    </footer>
+  </body>
+</html>

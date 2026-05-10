@@ -1,0 +1,257 @@
+{literal}
+<script>
+function _adminSelect( id,busyo,name,set_pattern ="1" ){
+  // if (set_pattern == ""){
+  //   window.opener._adminSelect(id,busyo,name);
+  // }else{
+  //   window.opener._adminSelect2(id,busyo,name);
+  // }
+  //window.close();
+  if (set_pattern == ""){
+    window.parent._adminSelect(id,busyo,name);
+  }else{
+    window.parent._adminSelect2(id,busyo,name);
+  }
+  window.parent.$('#tantousya_modal').dialog( 'close' );
+}
+
+</script>
+{/literal}
+
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-user">
+      <form name="search_form" action="./" method="post">
+        <input type="hidden" name="page" value="{$page|escape}">
+        <input type="hidden" name="exec" value="search">
+        <input type="hidden" name="set_pattern" value="{$set_pattern|escape}">
+        <input type="hidden" name="syoutai_only" value="{$syoutai_only|escape}">
+
+        <br>
+
+        <div class="row">
+          {if $page=="admin_list_select_win"}
+          <div class="col-md-4 pl-1">
+            <div class="msr_text_01">
+              <label>{if $search_condition.syoutai_only=="1"}招待者を{/if}担当したイベント</label>
+              <select name="select_event_id" style="width:200px;">
+                <option value="">選択してください</option>
+                {html_options options=$_conf_event selected=$search_condition.select_event_id}
+              </select>
+            </div>
+          </div>
+          {else}
+          <div class="col-md-4 pl-1">
+            <div class="msr_text_01">
+              <label>中分類（担当者管理）</label>
+              <select name="admin_mid_cate" style="width:240px;" multiple="multiple" class="select-multiple">
+                <option value=""></option>
+                {html_options options=$_ac_mid_cate selected=$search_condition.admin_mid_cate}
+              </select>
+              <p class="small">※Ctrlキーで複数選択できます</p>
+            </div>
+          </div>
+          {/if}
+
+          <div class="col-md-4 pl-1">
+            <div class="msr_text_01">
+              <label>担当者ID</label>
+              <input type="text" name="admin_id" value="{$search_condition.admin_id|escape}" style="width:50%;" />
+            </div>
+          </div>
+
+          <div class="col-md-4 pl-1">
+            <div class="msr_text_01">
+              <label>氏名</label>
+              <input type="text" name="admin_name" value="{$search_condition.admin_name|escape}"  style="width:50%;"/>を含む
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-3 pl-1">
+            <div class="msr_pulldown_01">
+              <label>担当者エリア名</label>
+              <select name="admin_tanarea_id">
+                <option value="">選択してください</option>
+                {html_options options=$_conf_tanarea selected=$search_condition.admin_tanarea_id}
+              </select>
+            </div>
+          </div>
+
+          <div class="col-md-3 pl-1">
+            <div class="msr_text_01">
+              <label>所属(支店名・部署名)</label>
+
+              <!-- {* ****************** 所属フィルター ****************** *} -->
+              <input type="text" name="syozoku_filter" placeholder="選択肢をフィルター" onKeyup="syozokuFilter();">
+              <select id="hidden_syozoku_id_select" style="display:none;">
+                <option value="">選択してください</option>
+                {html_options options=$_conf_syozoku selected=$search_condition.admin_syozoku_id}
+              </select>
+              {literal}
+              <script>
+                function syozokuFilter(){
+                  var filter = $('input[name="syozoku_filter"]').val();
+                  if(filter==''){
+                    $('select[name="admin_syozoku_id"]').html( $("#hidden_syozoku_id_select").html() );
+                  }else{
+                    $('select[name="admin_syozoku_id"]').html('');
+                    $('select[name="admin_syozoku_id"]').append($("<option>").val('').text( '選択してください' ));
+                    $("#hidden_syozoku_id_select option").each(function(i){
+                      if($(this).text().indexOf(filter) != -1){
+                        $('select[name="admin_syozoku_id"]').append($("<option>").val($(this).val()).text( $(this).text() ));
+                      }
+                    });
+                  }
+                }
+              </script>
+              {/literal}
+              <!-- {* ****************** /所属フィルター ****************** *} -->
+
+              <select name="admin_syozoku_id">
+                <option value="">選択してください</option>
+                {html_options options=$_conf_syozoku selected=$search_condition.admin_syozoku_id}
+              </select>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4 pl-1">
+            <div class="msr_text_01">
+              <label>並び順</label>
+              <select name="order_by">
+                <option value="">選択してください</option>
+                {html_options options=$order_by_arr selected=$search_condition.order_by}
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="update ml-auto mr-auto">
+            <button type="submit" class="btn btn-primary btn-round">検　索</button>
+            <!-- {* <button type="button" class="btn btn-primary btn-round" onClick="location.href='?page=admin_list';">リセット</button> *} -->
+            <button type="button" class="btn btn-primary btn-round" onClick="location.href='?page={$page|escape}';">リセット</button>
+            {if $page=="admin_list_select_win"}
+            　　　<button type="button" class="btn btn-primary btn-round" onClick="window.parent.$('#tantousya_modal').dialog( 'close' );">閉じる</button>
+            {/if}
+          </div>
+        </div>
+
+      </form>
+    </div><!-- <div class="card card-user"> -->
+  </div><!-- <div class="col-md-12"> -->
+</div><!-- <div class="row"> -->
+
+{if $page!="admin_list_select_win"}
+<button type="button" onClick="location.href='?page=admin_edit';" class="btn btn-primary btn-round">新規登録</button>
+{/if}
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body">
+        {if $count==0}
+          <br><br>条件に合うデータがありませんでした。<br><br><br>
+        {else}
+          {include file="$_SYSTEM_ROOT_DIR/admin/templates/page_navi.html"}
+          <div class="table-responsive">
+            <table class="table">
+              <thead class=" text-primary">
+                <th>
+                  担当者名
+                </th>
+                <th>
+                  役職
+                </th>
+                <th>
+                  担当エリア
+                </th>
+                <th>
+                  所属<br>(支店名・部署名)
+                </th>
+                <th>
+                  来場者ﾃﾞｰﾀ<br>での中分類
+                </th>
+                <th>
+                  ログイン権限
+                </th>
+                <th>
+                  マスター管理権限
+                </th>
+                <th>
+                  ユーザー閲覧権限
+                </th>
+                <th>
+                  集計閲覧権限
+                </th>
+                <th>
+                  外部企業
+                </th>
+                <th>
+                  外部企業一覧
+                </th>
+              </thead>
+              <tbody>
+              {foreach from=$main_recs item=rec}
+                <tr>
+                  <td>
+                    {$rec.admin_name|escape}
+                  </td>
+                  <td>
+                    {$rec.admin_yakusyoku|escape}
+                  </td>
+                  <td>
+                    {$rec.tanarea_name|escape}
+                  </td>
+                  <td>
+                    {$rec.syozoku_name|escape}
+                  </td>
+                  <td>
+                    {$rec.admin_mid_cate_disp|escape}
+                  </td>
+                  <td>
+                    {$rec.admin_login_kengen_disp|escape}
+                  </td>
+                  <td>
+                    {$rec.admin_master_kengen_disp|escape}
+                  </td>
+                  <td>
+                    {$rec.admin_user_kengen_disp|escape}
+                  </td>
+                  <td>
+                    {$rec.admin_syuukei_etsuran_kengen_disp|escape}
+                  </td>
+                  <td>
+                    {if $rec.admin_kyouryoku_kigyou_flg == 1}
+                    ○
+                    {/if}
+                  </td>
+                  <td>
+                    {if $rec.companies != null}
+                    {implode("\n", explode(',', $rec.companies))|escape|nl2br}
+                    {/if}
+                  </td>
+                  <td>
+                  {if $page=="admin_list_select_win"}
+                  <button type="button" onClick="_adminSelect('{$rec.admin_id|escape}','{$rec.syozoku_name|escape}','{$rec.admin_name|escape}','{$set_pattern|escape}');" class="btn btn-primary btn-round">選択</button>
+                  {else}
+                  <button type="button" onClick="location.href='?page=admin_edit&id={$rec.admin_id|escape}';" class="btn btn-primary btn-round">詳細</button>
+                  {/if}
+                  </td>
+                </tr>
+              {/foreach}
+              </tbody>
+            </table>
+          </div>
+          {include file="$_SYSTEM_ROOT_DIR/admin/templates/page_navi.html"}
+        {/if}
+      </div>
+    </div>
+  </div>
+</div>
+

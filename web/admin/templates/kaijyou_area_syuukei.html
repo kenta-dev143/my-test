@@ -1,0 +1,164 @@
+{literal}
+<script>
+  $(window).on('load', function() {
+    setTimeout(function(){
+      location.reload();
+    },30000);
+  });
+
+  function _userlistCsv(){
+    document.form_list.exec.value='area_csv';
+    document.form_list.submit();
+  }
+</script>
+{/literal}
+        <div class="row" style="margin-top:10px;">
+          <div class="col-md-12">
+            <div class="card">
+            {if $select_event_id!=""}
+              {if $no_area == 1}
+              <div class="card-header">
+                <h3>選択中のイベントではエリアが設定されていません</h3>
+              </div>
+              {else}
+              <form name="form_list" action="?page=kaijyou_area_syuukei" method="post">
+              <input type="hidden" name="exec" value="search">
+                <div class="msr_pulldown_01">
+                  <h4 class="card-title">日付</h4>
+                  <select name="select_ymd" onchange="document.form_list.submit();">
+                    {html_options options=$select_ymd_arr selected=$search_condition.select_ymd}
+                  </select>
+                </div>
+              </form>
+
+              <div class="card-header">
+                <h3>エリア別-大分類別-滞在者数 (※30秒自動更新)</h3>
+              </div>
+
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead class=" text-primary">
+                    <th style="color:#000000;">
+                      エリア
+                    </th>
+                    {foreach from=$_conf_big_cate item=big_cate_name}
+                    <th>{$big_cate_name|escape}</th>
+                    {/foreach}
+                    <th>
+                      合計
+                    </th>
+                    </thead>
+                    <tbody>
+                    {foreach from=$area_names key=area_id item=area_name}
+                    <tr>
+                      <td>
+                        {$area_name|escape}
+                      </td>
+                      {foreach from=$_conf_big_cate key=bcate_id item=bcate_name}
+                      <td>
+                        {$taizai_recs[$area_id][$bcate_id]['cnt']|default:'0'|escape}
+                      </td>
+                      {/foreach}
+                      <td>
+                        {$area_total[$area_id]|escape}
+                      </td>
+                    </tr>
+                    {/foreach}
+                    <tr>
+                      <td>
+                        全エリア
+                      </td>
+                      {foreach from=$_conf_big_cate key=bcate_id item=bcate_name}
+                      <td>
+                        {$big_cate_total[$bcate_id]|default:'0'|escape}
+                      </td>
+                      {/foreach}
+                      <td>
+                        {$all_total|escape}
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="card-header">
+                <h3>エリア別-大分類別-入場者数</h3>
+              </div>
+
+              <div class="card-header row">
+                <div class="update ml-auto mr-3">
+                  <button type="button" onClick="_userlistCsv();" class="btn btn-primary btn-round" style="width:200px;">CSVダウンロード</button>
+                </div>
+              </div>
+
+              {foreach from=$main_recs key=area_id item=rec}
+              <div class="card-header">
+                <h4 class="card-title">{$area_names[$area_id]|escape}</h4>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead class=" text-primary">
+                      <th style="color:#000000;">
+                        時刻
+                      </th>
+                      {foreach from=$_conf_big_cate1 item=big_cate_name}
+                        <th>{$big_cate_name|escape}</th>
+                      {/foreach}
+                      <th>
+                        合計(招待)
+                      </th>
+                      {foreach from=$_conf_big_cate2_html item=big_cate_name}
+                        <th style="color:#6666ff;">{$big_cate_name}</th>
+                      {/foreach}
+                      <th style="color:#000000;">
+                        入場<br>合計
+                      </th>
+                      <th style="color:#ff7777;">
+                        退場
+                      </th>
+                    </thead>
+                    <tbody>
+                      {foreach from=$rec item=area_rec}
+                        <tr>
+                          <td>
+                            {$area_rec.time|escape}
+                          </td>
+                          {foreach from=$_conf_big_cate1 key=bcate_id item=bcate_name}
+                          <td>
+                            {$area_rec[$bcate_id]|escape}
+                          </td>
+                          {/foreach}
+                          <td>
+                            {$area_rec.b_goukei|escape}
+                          </td>
+                          {foreach from=$_conf_big_cate2_html key=bcate_id item=bcate_name}
+                          <td>
+                            {$area_rec[$bcate_id]|escape}
+                          </td>
+                          {/foreach}
+                          <td>
+                            {$area_rec.all_goukei|escape}
+                          </td>
+                          <td>
+                            {$area_rec.taijyou_cnt|escape}
+                          </td>
+                        </tr>
+                      {/foreach}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              {/foreach}
+              {/if}
+            {else}
+              {include file="$_SYSTEM_ROOT_DIR/admin/templates/parts/select_event.html"}
+            {/if}
+            </div>
+          </div>
+
+
+
+        </div>

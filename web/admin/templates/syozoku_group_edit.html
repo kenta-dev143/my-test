@@ -1,0 +1,143 @@
+{literal}
+<script>
+function _regist(_mode){
+    if(_mode =='delete'){
+        if(window.confirm('本当に削除してもよろしいでしょうか？')){
+            document.form_edit.mode.value=_mode;
+            document.form_edit.submit();
+        }
+    }else{
+        document.form_edit.mode.value=_mode;
+        document.form_edit.submit();
+    }
+}
+
+function syozokuGroupSelect(obj){
+  var index = obj.selectedIndex;
+  var value = obj.options[index].value;
+  var name = obj.options[index].text;
+
+  var selected = $('input[name="syozoku_group_ids[]"][value="' + value + '"]');
+
+  if (selected.length > 0 || value == '') {
+    return;
+  }
+
+  var div_syozoku = $('#selected_syozoku_group');
+  var add_syozoku_div = $('<div>', {text: name, class: 'pl-2'});
+  var add_syozoku_input = $('<input>',
+          {
+            type: 'hidden',
+            name: 'syozoku_group_ids[]',
+            value: value
+          }
+  );
+  var add_delete_button = $('<button>', {text: '削除', class: 'delete_syozoku_group btn-danger ml-2'});
+  add_delete_button.click(deleteSyozokuGroup);
+  div_syozoku.append(add_syozoku_div);
+  add_syozoku_div.append(add_syozoku_input);
+  add_syozoku_div.append(add_delete_button);
+}
+
+function deleteSyozokuGroup() {
+  $(this).parent().remove();
+}
+
+$(function () {
+  $('.delete_syozoku_group').on('click', deleteSyozokuGroup);
+});
+
+</script>
+{/literal}
+
+<div class="inner_wrap">
+  {if $err_msg.0 !=''}
+    <div class="errArea">
+      {foreach from=$err_msg item=msg}
+        {$msg|escape}<br>
+      {/foreach}
+    </div><br>
+  {elseif $success_msg!=""}
+    <div class="successArea">{$success_msg|escape}</div>
+  {/if}
+
+  <form name="form_edit" action="./?page={$page|escape}" method="post" onSubmit="return false;">
+  <input type="hidden" name="exec" value="save">
+  <input type="hidden" name="mode">
+  <input type="hidden" name="token" value="{$token|escape}">
+  <input type="hidden" name="id" value="{$id|escape}">
+
+    <div class="msr_text_01">
+      <label>閲覧部署グループ名</label>
+      <input type="text" name="szkgrp_name" value="{$szkgrp_name|escape}" />
+    </div>
+
+    <div class="msr_text_01">
+      <label>コード</label>
+      <input type="text" name="szkgrp_code" value="{$szkgrp_code|escape}" />
+    </div>
+
+    <div class="msr_text_01">
+      <label for="szkgrp_hidden_flg">
+        <input type="checkbox" class="largechkbox" id="szkgrp_hidden_flg" name="szkgrp_hidden_flg" value="1" {if $szkgrp_hidden_flg=="1"}checked{/if}/>&nbsp;検索時非表示にする
+      </label>
+    </div>
+
+    <div class="msr_text_01">
+      <label>閲覧部署グループ紐付け</label>
+    </div>
+    <div id="syozoku_group_select" class="bg-light p-2">
+      <div class="msr_text_01">
+        <!-- {* ****************** 企業フィルター ****************** *} -->
+        <input type="text" name="syozoku_group_filter" placeholder="選択肢をフィルター" onKeyup="syozokuGroupFilter();"><br>
+        選択肢フィルタに閲覧部署グループ名を入力（例:食品安全管理部等）後、プルダウン候補から閲覧部署グループ名を選択<br><br>
+        <select id="hidden_syozoku_group_id_select" style="display:none;">
+          <option value="">選択してください</option>
+          {html_options options=$_conf_syozoku_group selected=$search_condition.syozoku_group_id}
+        </select>
+        {literal}
+        <script>
+          function syozokuGroupFilter(){
+            var filter = $('input[name="syozoku_group_filter"]').val();
+            if(filter==''){
+              $('select[name="syozoku_group_id"]').html( $("#hidden_syozoku_group_id_select").html() );
+            }else{
+              $('select[name="syozoku_group_id"]').html('');
+              $('select[name="syozoku_group_id"]').append($("<option>").val('').text( '選択してください' ));
+              $("#hidden_syozoku_group_id_select option").each(function(i){
+                if($(this).text().indexOf(filter) != -1){
+                  $('select[name="syozoku_group_id"]').append($("<option>").val($(this).val()).text( $(this).text() ));
+                }
+              });
+            }
+          }
+        </script>
+        {/literal}
+        <!-- {* ****************** /企業フィルター ****************** *} -->
+
+        <select name="syozoku_group_id" style="width:460px;" onchange="syozokuGroupSelect(this);">
+          <option value="">選択してください</option>
+          {html_options options=$_conf_syozoku_group}
+        </select>
+      </div>
+
+      <div id="selected_syozoku_group">
+        {foreach from=$syozoku_groups item=syozoku_group}
+        <div class="pl-2">{$syozoku_group.szkgrp_name|escape}<input type="hidden" name="syozoku_group_ids[]" value="{$syozoku_group.szkgrp_id}"/><button class="delete_syozoku_group btn-danger ml-2">削除</button></div>
+        {/foreach}
+      </div>
+    </div>
+
+    <p class="msr_btn15">
+      {if $mode=='insert'}
+        <a href="javascript:_regist('insert');void(0);">上記内容で新規登録する</a>
+      {else}
+        <a href="javascript:_regist('update');void(0);">上記内容で更新する</a>
+      {/if}
+      &nbsp;&nbsp;&nbsp;
+      <a href="javascript:location.href='?page=syozoku_group_list&sess_no_init=1';void(0);">一覧へ戻る</a>
+    </p>
+
+  </form>
+
+</div>

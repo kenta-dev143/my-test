@@ -1,0 +1,84 @@
+
+<form name="search_form" action="./" method="post">
+ <input type="hidden" name="page" value="<?php echo \htmlentities($page??'', ENT_QUOTES, 'UTF-8', false); ?>">
+ <input type="hidden" name="mailhd_id" value="">
+ <input type="hidden" name="exec" value="now_send">
+</form>
+
+<button type="button" onClick="location.href='?page=user_mail_send';" style="width:200px;" class="btn btn-primary btn-round">新規送信予約</button>
+
+<div class="row">
+ <div class="col-md-12">
+ <div class="card">
+ <div class="card-body">
+ <?php if($count==0): ?>
+ <br><br>データがありませんでした。<br><br><br>
+ <?php else: ?>
+ <?php echo $this->runChild('page_navi'); ?>
+ <div class="table-responsive">
+ <table class="table">
+ <thead class=" text-primary">
+ <th>
+ 予約日時
+ </th>
+ <th>
+ 登録者
+ </th>
+ <th>
+ メール種類(メールテンプレート)
+ </th>
+ <th>
+ 送信対象件数
+ </th>
+ <th>
+ ステータス
+ </th>
+ </thead>
+ <tbody>
+ <?php $__currentLoopData = $main_recs; $this->addLoop($__currentLoopData);$this->getFirstLoop();
+ foreach($__currentLoopData as $rec): $loop = $this->incrementLoopIndices();  ?>
+ <tr>
+ <td>
+ <?php if($rec['mailhd_yoyaku_ymdhi']=="2099/12/31 23:59"): ?>
+ <span style="color:red;">未設定</span>　<input type="button" value="今すぐ送信する" onClick="document.search_form.mailhd_id.value='<?php echo \htmlentities($rec['mailhd_id']??'', ENT_QUOTES, 'UTF-8', false); ?>';document.search_form.submit();">
+ <?php else: ?>
+ <?php echo \htmlentities($rec['mailhd_yoyaku_ymdhi']??'', ENT_QUOTES, 'UTF-8', false); ?>
+
+ <?php endif; ?>
+ </td>
+ <td>
+ <?php echo \htmlentities($rec['syozoku_name']??'', ENT_QUOTES, 'UTF-8', false); ?><br>
+ <?php echo \htmlentities($rec['admin_name']??'', ENT_QUOTES, 'UTF-8', false); ?>
+
+ </td>
+ <td>
+ <?php echo \htmlentities($rec['mailhd_mailt_name']??'', ENT_QUOTES, 'UTF-8', false); ?>
+
+ </td>
+ <td>
+ <?php echo $rec['detail_cnt']; ?>
+
+ </td>
+ <td>
+ <?php if($rec['mailhd_status']==0): ?>
+ 送信実行待ち
+ <?php elseif($rec['mailhd_status']==1): ?>
+ <span style="color:green;">送信中</span>
+ <?php elseif($rec['mailhd_status']==2): ?>
+ <span style="color:blue;">送信完了</span>
+ <?php elseif($rec['mailhd_status']==9): ?>
+ <span style="color:blue;">送信エラー</span>
+ <?php endif; ?>
+ </td>
+ </tr>
+ <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+ </tbody>
+ </table>
+ </div>
+ <?php echo $this->runChild('page_navi'); ?>
+ <?php endif; ?>
+ </div>
+ </div>
+ </div>
+</div>
+

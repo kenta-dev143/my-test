@@ -1,0 +1,32 @@
+RewriteEngine On
+
+
+# ---------- https強制する場合 --------------------
+#RewriteCond %{HTTPS} off
+#環境によってはこちらの書き方
+RewriteCond %{HTTP:X-Forwarded-Proto} =http
+
+RewriteCond %{HTTP_HOST} !=localhost
+RewriteCond %{HTTP_HOST} !=127.0.0.1
+RewriteCond %{HTTP_HOST} !^192\.168\.
+
+#RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+#環境によってはこちらの書き方
+RewriteRule .* https://%{HTTP:Host}%{REQUEST_URI} [L,R=permanent]
+# ---------- https強制する場合 --------------------
+
+#とりあえず以下全部一旦コメント化
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+
+RewriteRule ^([^\.\/]+)/$                                       index.php?evekey=$1 [L,QSA]
+
+
+
+# ファイル・ディレクトリがないときは404エラー
+#ErrorDocument 403 /?page=404
+#ErrorDocument 404 /?page=404
+#ErrorDocument 500 /?page=404
+#ErrorDocument 503 /?page=404
+

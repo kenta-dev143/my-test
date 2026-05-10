@@ -1,0 +1,28 @@
+<?php if($page_flg != 0): ?>
+<div style="font-size: 12px;">
+ <?php if($page_back == 1): ?>
+ <a href="index.php?page=<?php echo $page; ?>&offset=<?php echo $offset_first; ?>">&lt;&lt;最初へ</a>&nbsp;
+ <a href="index.php?page=<?php echo $page; ?>&offset=<?php echo $offset_back; ?>">&lt;前へ</a>
+ <?php endif; ?>
+ <?php if($start_dot == 1): ?><a href="index.php?page=<?php echo $page; ?>&offset=<?php echo $offset_back_page; ?>">…</a> <?php endif; ?>
+ <?php $__currentLoopData = $page_navi; $this->addLoop($__currentLoopData);$this->getFirstLoop();
+ foreach($__currentLoopData as $navi): $loop = $this->incrementLoopIndices();  ?>
+ <?php if($navi['link'] != 0): ?>
+ <a href="index.php?page=<?php echo $page; ?>&offset=<?php echo $navi['offset']; ?>"><?php echo $navi['page_num']; ?></a>
+ <?php else: ?>
+ <?php echo $navi['page_num']; ?>
+
+ <?php endif; ?>
+ <?php if($navi['separator'] == 1): ?>
+ |
+ <?php endif; ?>
+ <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+ <?php if($end_dot == 1): ?><a href="index.php?page=<?php echo $page; ?>&offset=<?php echo $offset_next_page; ?>">…</a> <?php endif; ?>
+ <?php if($page_next == 1): ?>
+ <a href="index.php?page=<?php echo $page; ?>&offset=<?php echo $offset_next; ?>">次へ&gt;</a>&nbsp;
+ <a href="index.php?page=<?php echo $page; ?>&offset=<?php echo $offset_last; ?>">最後へ&gt;&gt;</a>
+ <?php endif; ?>
+ <br>
+ (<?php echo $count; ?>件中　<?php echo $st_count; ?>件～<?php echo $en_count; ?>件目)
+</div>
+ <?php endif; ?>

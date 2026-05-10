@@ -1,0 +1,210 @@
+/*######################*/
+/*## ログインページ SETTING ##*/
+/*######################*/
+.login {}
+.login-pre {}
+/* ----------------------------------------------------- */
+/* MAIN SETTING ----------------------------------------------------- */
+/* ----------------------------------------------------- */
+body:before {
+	content: "";
+	display: block;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: -1;
+	width: 100%;
+	height: 100vh;
+	background: url("../images/bg.jpg") 50% 50% no-repeat;
+	background-size: cover;
+}
+body {
+	min-height: 100%;
+}
+#content.login {
+	position: absolute;
+	width: 100%;
+	min-height: 100%;
+	padding: 6rem;
+	margin: 0;
+}
+#content .white-base {
+	background: white;
+	padding: 6rem;
+	max-width: 555px;
+	width: 100%;
+}
+
+#content.login-pre .white-base {	max-width: 1140px;}
+#footer-login {
+	position: absolute;
+	width: 100%;
+	left: 0;
+	bottom: 2rem;
+	z-index: 100;
+	padding: 0;
+	margin: 0;
+}
+#footer-login .copyright {
+	text-align: center;
+	color: white;
+	font-size: 1.1rem;
+}
+.login .logo {
+	display: block;
+}
+.login .logo svg {
+	width: 50%;
+	height: auto;
+}
+.login .logo svg .st0 {
+	fill: #231815;
+}
+.login .logo svg .st1 {
+	fill: #0062B0;
+}
+.login .logo svg .st2 {
+	fill: #009844;
+}
+.login .left h2 {
+	display: block;
+	padding: 3rem 0 0 0;
+	margin: 0;
+}
+.login .left h2 img {
+	width: 100%;
+	height: auto;
+}
+.login .left h3 {
+	display: block;
+	padding: 0 !important;
+	margin: 0 !important;
+	font-size: 3.6rem;
+	font-weight: 900;
+	line-height: 1.4444em;
+}
+.login .left .inner, .login .right .inner {
+	padding: 0 2rem;
+}
+.login .left p.copy {
+	display: block;
+	font-weight: 700;
+	font-size: 1.6rem;
+	line-height: 1.65em;
+	padding: 3rem 0 0 0;
+}
+.form-control {
+	width: 100%;
+	min-height: 5rem;
+	padding: 0rem 1rem;
+	line-height: 1.42857143;
+	color: rgba(34, 34, 34, 1.00);
+	border-radius: 0;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	background: rgba(238, 238, 238, 1.00);
+	border: none;
+}
+.form-control {
+	font-size: 1.6rem;
+}
+.form-group {
+	margin-bottom: 3rem;
+}
+label.fact-title {
+	text-align: left;
+	font-weight: 700;
+	font-size: 1.8rem;
+	margin-bottom: 1.5rem;
+	display: block;
+}
+.blue-button {
+	border-radius: 0;
+	border: none;
+	background-color: rgba(0, 98, 178, 1.00);
+	margin: 0;
+	padding: 0 1rem 0 1rem;
+	height: 5rem;
+	width: 100%;
+	overflow: hidden;
+	display: table;
+}
+.blue-button span {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+	color: white;
+	font-size: 1.8rem;
+	line-height: 1em;
+	font-weight: 700;
+	width: 100rem;
+}
+.button-area {
+	padding: 3rem 0 0 0;
+}
+.attention-area{padding: 3rem 0 0 0;}
+.attention-area p{display: block;font-size: 1.4rem;line-height: 1.65em;color:rgba(102,102,102,1.00); }
+.attention-area p strong{display: block;padding: 0.5rem 0;line-height: 1.65em;font-weight: 700;color:	rgba(34,34,34,1.00); }
+.attention-area u{color:	rgba(34,34,34,1.00);font-weight: 700;}
+
+.validation{padding: 1.5rem;  ;background: rgba(245,58,61,0.30);display: none;}
+.validation .error{display: block;color: rgba(245,58,61,1.00);font-weight: 500;line-height: 1.65em;}
+/* BREAK POINT -----------------------------------------------------*/
+@media (max-width: 767px) {
+	body:before {
+		background: url("../images/bg_sp.jpg") 50% 50% no-repeat;
+		background-size: cover;
+	}
+	#content.login {
+		padding: 2rem 2rem 3rem 2rem;
+		margin: 0;
+		position: static;
+	}
+	#content .white-base {
+		padding: 2rem;
+		margin: 0;
+		min-width: 100%;
+	}
+	#footer-login {
+		width: 100%;
+		padding: 0;
+		margin: 0;
+		height: 3rem;
+		bottom: 0rem;
+}
+	#footer-login .copyright {
+		line-height: 3rem;
+		font-size: 0.8rem;
+	}
+	.login .left {
+		margin-bottom: 3rem;
+	}
+	.login .left h2 {
+		display: block;
+		padding: 1.5rem 0 0 0;
+	}
+	.login .left p.copy {
+		padding: 1.5rem 0 0 0;
+	}
+	.button-area {
+		padding: 1.5rem 0 0 0;
+	}
+	.login .left .inner, .login .right .inner {
+		padding: 1rem;
+	}
+
+}
+@media (max-width: 320px) {
+	#content.login {
+		padding: 2rem 2rem 4rem 2rem;
+		margin: 0;
+		position: static;
+	}
+	#footer-login {
+		padding: 0.5rem 0;
+		height: auto;
+	}
+	#footer-login .copyright {
+		line-height: 1.444rem;
+	}
+}

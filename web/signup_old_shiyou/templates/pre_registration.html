@@ -1,0 +1,39 @@
+{if $err_msg.0 !=''}
+    <div class="errArea">
+    {foreach from=$err_msg item=msg}
+        {$msg|escape}<br>
+    {/foreach}
+    </div>
+{/if}
+
+<div class="inner">
+<form class="registration-form" method="post" action="./?exec=pre_confirm">
+
+<div class="form-group">
+<label for="user_login_id" class="fact-title">メールアドレス<span>必須</span></label>
+<input type="text" class="form-control" name="user_login_id" value="{$user_login_id|escape}" id="user_mail" placeholder="メールアドレス">
+</div>
+<span class="form-spacer"></span>
+<div class="form-group">
+<label for="user_login_id_chk" class="fact-title">確認のためもう一度入力してください。<span>必須</span></label>
+<input type="text" class="form-control" name="user_login_id_chk" value="{$user_login_id_chk|escape}" id="user_login_id_chk" placeholder="メールアドレス確認用">
+</div>
+<span class="form-spacer"></span>
+<div class="form-group">
+<label for="admin_mail" class="fact-title">日本アクセス担当者メールアドレス<span>必須</span></label>
+<input type="email" class="form-control form-control_small" name="admin_mail" value="{$admin_mail|escape}" id="admin_mail" placeholder="担当者メールアドレス">
+</div>
+<span class="form-spacer"></span>
+<div class="form-group">
+<label for="admin_mail_chk" class="fact-title">確認のためもう一度入力してください。<span>必須</span></label>
+<input type="email" class="form-control form-control_small" name="admin_mail_chk" value="{$admin_mail_chk|escape}" id="admin_mail_chk" placeholder="担当者メールアドレス確認用">
+</div>
+<div class="button-area">
+<button type="submit" class="blue-button t-hover"><span>この内容で申し込む</span></button>
+</div>
+</form>
+<div class="attention-area">
+<p><strong>仮登録について</strong>
+入力されたアドレスへ本登録用のURLをメールで送信します。そちらから本登録を行ってください。</p>
+</div>
+</div>

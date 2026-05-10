@@ -1,0 +1,353 @@
+
+<script>
+function _regist(_mode){
+ if(_mode =='delete') {
+ if (window.confirm('本当に削除してもよろしいでしょうか？')) {
+ document.form_edit.mode.value = _mode;
+ document.form_edit.submit();
+ }
+ }else if (_mode == 'archive') {
+ if (window.confirm('アーカイブしてもよろしいでしょうか？')) {
+ document.form_edit.mode.value = _mode;
+ document.form_edit.submit();
+ }
+ }else{
+ document.form_edit.mode.value=_mode;
+ document.form_edit.submit();
+ }
+}
+
+</script>
+
+
+<div class="inner_wrap">
+ <?php if($err_msg['0'] !=''): ?>
+ <div class="errArea">
+ <?php $__currentLoopData = $err_msg; $this->addLoop($__currentLoopData);$this->getFirstLoop();
+ foreach($__currentLoopData as $msg): $loop = $this->incrementLoopIndices();  ?>
+ <?php echo \htmlentities($msg??'', ENT_QUOTES, 'UTF-8', false); ?><br>
+ <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+ </div><br>
+ <?php elseif($success_msg!=""): ?>
+ <div class="successArea"><?php echo $success_msg; ?></div>
+ <?php endif; ?>
+
+ <form name="form_edit" action="./?page=<?php echo \htmlentities($page??'', ENT_QUOTES, 'UTF-8', false); ?>" method="post" onSubmit="return false;">
+ <input type="hidden" name="exec" value="save">
+ <input type="hidden" name="mode">
+ <input type="hidden" name="token" value="<?php echo \htmlentities($token??'', ENT_QUOTES, 'UTF-8', false); ?>">
+ <input type="hidden" name="id" value="<?php echo \htmlentities($id??'', ENT_QUOTES, 'UTF-8', false); ?>">
+
+ <div class="msr_text_01">
+ <label style="font-weight:bold;">イベント名</label>
+ <input type="text" name="event_name" value="<?php echo \htmlentities($event_name??'', ENT_QUOTES, 'UTF-8', false); ?>" />
+ </div>
+
+ <div class="msr_text_01">
+ <label style="font-weight:bold;">イベント地域識別ID</label>
+ <!-- <?php /* <input type="text" name="event_area_shikibetsu_id" value="<?php echo \htmlentities($event_area_shikibetsu_id??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:50px;" />（QRコードの１桁目に利用される文字で "W" や "E" など） */ ?> -->
+ <select name="event_area_shikibetsu_id">
+ <option value=""></option>
+ <?php echo blade_html_options(['options' => $_wrk_event_area_shikibetsu_id, 'selected' => $event_area_shikibetsu_id]); ?>
+
+ </select>
+ </div>
+
+ <div class="msr_text_01">
+ <label style="font-weight:bold;">管理画面タイトル背景色</label>
+ <input type="color" name="event_title_bgcolor" value="<?php echo \htmlentities($event_title_bgcolor??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:100px;" />
+ </div>
+
+
+ <div class="msr_text_01">
+ <label style="font-weight:bold;">プルダウン用イベント名</label>
+ <input type="text" name="event_pulldown_name" value="<?php echo \htmlentities($event_pulldown_name??'', ENT_QUOTES, 'UTF-8', false); ?>" />
+ </div>
+
+ <div class="msr_text_01">
+ <label style="font-weight:bold;">プルダウン表示</label>
+ <select name="event_pulldown_disp_flg">
+ <?php echo blade_html_options(['options' => $_conf_pulldown_disp, 'selected' => $event_pulldown_disp_flg]); ?>
+
+ </select>
+ </div>
+
+ <div class="msr_text_01">
+ <label style="font-weight:bold;">会場名</label>
+ <input type="text" name="event_kaijyou_name" value="<?php echo \htmlentities($event_kaijyou_name??'', ENT_QUOTES, 'UTF-8', false); ?>" />
+ </div>
+
+ <!-- <?php /* 2021/06/02 Add ** Start *** */ ?> -->
+ <div class="msr_text_01">
+ <label style="font-weight:bold;">WEB展示会名称</label>
+ <input type="text" name="event_exhibition_name" value="<?php echo \htmlentities($event_exhibition_name??'', ENT_QUOTES, 'UTF-8', false); ?>" />
+ </div>
+ <!-- <?php /* 2021/06/02 Add ** Start *** */ ?> -->
+
+ <div class="msr_text_01" style="width:100%;">
+ <label style="font-weight:bold;">マイページ等のURL用Key（w2021fc-s など）</label>
+ <?php echo $_SYSTEM_ROOT_URLS; ?>/mypage/<input type="text" name="event_url_key" value="<?php echo \htmlentities($event_url_key??'', ENT_QUOTES, 'UTF-8', false); ?>" onkeyup="$('#urlkey').text(this.value);$('#urlkey2').text(this.value);$('#urlkey3').text(this.value);" style="width:130px;" />/　(マイページ)<br>
+ <?php echo $_SYSTEM_ROOT_URLS; ?>/visit/<span id="urlkey"><?php echo \htmlentities($event_url_key??'', ENT_QUOTES, 'UTF-8', false); ?></span>/　(入退場管理)<br>
+ <?php echo $_SYSTEM_ROOT_URLS; ?>/signup/<span id="urlkey2"><?php echo \htmlentities($event_url_key??'', ENT_QUOTES, 'UTF-8', false); ?></span>/　(WEB展示会ｻｲﾝｱｯﾌﾟ)<br>
+ <?php echo $_SYSTEM_ROOT_URLS; ?>/s-signup/<span id="urlkey3"><?php echo \htmlentities($event_url_key??'', ENT_QUOTES, 'UTF-8', false); ?></span>/　(招待者ｻｲﾝｱｯﾌﾟ)<br>
+ <?php echo $_SYSTEM_ROOT_URLS; ?>/r-signup/<span id="urlkey3"><?php echo \htmlentities($event_url_key??'', ENT_QUOTES, 'UTF-8', false); ?></span>/　(出展社ｻｲﾝｱｯﾌﾟ)<br>
+ <?php echo $_SYSTEM_ROOT_URLS; ?>/k-signup/<span id="urlkey3"><?php echo \htmlentities($event_url_key??'', ENT_QUOTES, 'UTF-8', false); ?></span>/　(関係者ｻｲﾝｱｯﾌﾟ)<br>
+ <?php echo $_SYSTEM_ROOT_URLS; ?>/u-signup/<span id="urlkey3"><?php echo \htmlentities($event_url_key??'', ENT_QUOTES, 'UTF-8', false); ?></span>/　(運営サポート・施工業ｻｲﾝｱｯﾌﾟ)
+ </div>
+
+ <!-- <?php /* 2021/05/25 Add ** Start *** */ ?> -->
+ <div class="msr_text_01" style="width:100%;">
+ <label style="font-weight:bold;">exhibition(WEB展示会（ガイドブック）)のURL用Key（west2021s など）</label>
+ <?php echo $_SYSTEM_ROOT_URLS; ?>/exhibition/<input type="text" name="event_exhibition_url_key" value="<?php echo \htmlentities($event_exhibition_url_key??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />/<br>
+ </div>
+ <!-- <?php /* 2021/05/25 Add ** End *** */ ?> -->
+
+ <div class="msr_text_01" style="width:100%;">
+ <label style="font-weight:bold;">開催期間（yyyy/mm/dd形式で指定）</label>
+ <input type="text" name="event_kaisai_ymd_st" value="<?php echo \htmlentities($event_kaisai_ymd_st??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:100px;" class="datepicker" />
+ 〜
+ <input type="text" name="event_kaisai_ymd_ed" value="<?php echo \htmlentities($event_kaisai_ymd_ed??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:100px;" class="datepicker" />
+ </div>
+
+ <div class="msr_text_01" style="width:100%;">
+ <label style="font-weight:bold;">来場管理期間（yyyy/mm/dd形式で指定）</label>
+ <input type="text" name="event_raikainri_ymd_st" value="<?php echo \htmlentities($event_raikainri_ymd_st??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:100px;" class="datepicker" />
+ 〜
+ <input type="text" name="event_raikainri_ymd_ed" value="<?php echo \htmlentities($event_raikainri_ymd_ed??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:100px;" class="datepicker" />
+ </div>
+
+ <div class="msr_text_01" style="width:100%;">
+ <label style="font-weight:bold;">来場日時登録(r-signup)受付期間</label>
+ （開始）<br>
+ 日付：
+ <input type="text" name="event_rsignup_start_ymd" value="<?php echo \htmlentities($event_rsignup_start_ymd??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:100px;" class="datepicker" />
+ 　時刻：
+ <select name="event_rsignup_start_hh">
+ <option value=""></option>
+ <?php echo blade_html_options(['options' => $_conf_hh, 'selected' => $event_rsignup_start_hh]); ?>
+
+ </select>
+ 時
+ <select name="event_rsignup_start_ii">
+ <option value=""></option>
+ <?php echo blade_html_options(['options' => $_conf_mm, 'selected' => $event_rsignup_start_ii]); ?>
+
+ </select>
+ 分<br>
+ （終了）<br>
+ 日付：
+ <input type="text" name="event_rsignup_end_ymd" value="<?php echo \htmlentities($event_rsignup_end_ymd??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:100px;" class="datepicker" />
+ 　時刻：
+ <select name="event_rsignup_end_hh">
+ <option value=""></option>
+ <?php echo blade_html_options(['options' => $_conf_hh, 'selected' => $event_rsignup_end_hh]); ?>
+
+ </select>
+ 時
+ <select name="event_rsignup_end_ii">
+ <option value=""></option>
+ <?php echo blade_html_options(['options' => $_conf_mm, 'selected' => $event_rsignup_end_ii]); ?>
+
+ </select>
+ 分<br>
+ </div>
+
+ <div class="msr_text_01" style="width:100%;">
+ <label style="font-weight:bold;">
+ (招待者)来場予定日時
+ <br><span style="color:red;">※「参加しない」等の選択肢を追加する場合は日付欄には「2999/01/01」を入力してください。</span><!-- <?php /* 2021/07/08 Add */ ?> -->
+ </label>
+
+ <!-- <input type="text" name="event_syoutai_yotei_time" value="<?php echo \htmlentities($event_syoutai_yotei_time??'', ENT_QUOTES, 'UTF-8', false); ?>" /> -->
+ <table border="1">
+ <tr>
+ <td style="background-color:#ffdddd;">日付</td>
+ <td style="text-align:center;"><input type="text" name="syoutai_ymd_0" value="<?php echo \htmlentities($syoutai_ymd_0??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:100px;" class="datepicker" /></td>
+ <td style="text-align:center;"><input type="text" name="syoutai_ymd_1" value="<?php echo \htmlentities($syoutai_ymd_1??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:100px;" class="datepicker" /></td>
+ <td style="text-align:center;"><input type="text" name="syoutai_ymd_2" value="<?php echo \htmlentities($syoutai_ymd_2??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:100px;" class="datepicker" /></td>
+ <td style="text-align:center;"><input type="text" name="syoutai_ymd_3" value="<?php echo \htmlentities($syoutai_ymd_3??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:100px;" class="datepicker" /></td>
+ <td style="text-align:center;"><input type="text" name="syoutai_ymd_4" value="<?php echo \htmlentities($syoutai_ymd_4??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:100px;" class="datepicker" /></td>
+ </tr>
+
+ <tr>
+ <td style="background-color:#ffdddd;">時間帯</td>
+ <td style="text-align:center;">
+ <input type="text" name="syoutai_time_0_0" value="<?php echo \htmlentities($syoutai_time_0_0??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_0_1" value="<?php echo \htmlentities($syoutai_time_0_1??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_0_2" value="<?php echo \htmlentities($syoutai_time_0_2??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_0_3" value="<?php echo \htmlentities($syoutai_time_0_3??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_0_4" value="<?php echo \htmlentities($syoutai_time_0_4??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_0_5" value="<?php echo \htmlentities($syoutai_time_0_5??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_0_6" value="<?php echo \htmlentities($syoutai_time_0_6??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_0_7" value="<?php echo \htmlentities($syoutai_time_0_7??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_0_8" value="<?php echo \htmlentities($syoutai_time_0_8??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_0_9" value="<?php echo \htmlentities($syoutai_time_0_9??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ </td>
+ <td style="text-align:center;">
+ <input type="text" name="syoutai_time_1_0" value="<?php echo \htmlentities($syoutai_time_1_0??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_1_1" value="<?php echo \htmlentities($syoutai_time_1_1??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_1_2" value="<?php echo \htmlentities($syoutai_time_1_2??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_1_3" value="<?php echo \htmlentities($syoutai_time_1_3??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_1_4" value="<?php echo \htmlentities($syoutai_time_1_4??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_1_5" value="<?php echo \htmlentities($syoutai_time_1_5??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_1_6" value="<?php echo \htmlentities($syoutai_time_1_6??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_1_7" value="<?php echo \htmlentities($syoutai_time_1_7??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_1_8" value="<?php echo \htmlentities($syoutai_time_1_8??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_1_9" value="<?php echo \htmlentities($syoutai_time_1_9??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ </td>
+ <td style="text-align:center;">
+ <input type="text" name="syoutai_time_2_0" value="<?php echo \htmlentities($syoutai_time_2_0??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_2_1" value="<?php echo \htmlentities($syoutai_time_2_1??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_2_2" value="<?php echo \htmlentities($syoutai_time_2_2??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_2_3" value="<?php echo \htmlentities($syoutai_time_2_3??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_2_4" value="<?php echo \htmlentities($syoutai_time_2_4??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_2_5" value="<?php echo \htmlentities($syoutai_time_2_5??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_2_6" value="<?php echo \htmlentities($syoutai_time_2_6??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_2_7" value="<?php echo \htmlentities($syoutai_time_2_7??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_2_8" value="<?php echo \htmlentities($syoutai_time_2_8??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_2_9" value="<?php echo \htmlentities($syoutai_time_2_9??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ </td>
+ <td style="text-align:center;">
+ <input type="text" name="syoutai_time_3_0" value="<?php echo \htmlentities($syoutai_time_3_0??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_3_1" value="<?php echo \htmlentities($syoutai_time_3_1??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_3_2" value="<?php echo \htmlentities($syoutai_time_3_2??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_3_3" value="<?php echo \htmlentities($syoutai_time_3_3??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_3_4" value="<?php echo \htmlentities($syoutai_time_3_4??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_3_5" value="<?php echo \htmlentities($syoutai_time_3_5??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_3_6" value="<?php echo \htmlentities($syoutai_time_3_6??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_3_7" value="<?php echo \htmlentities($syoutai_time_3_7??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_3_8" value="<?php echo \htmlentities($syoutai_time_3_8??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_3_9" value="<?php echo \htmlentities($syoutai_time_3_9??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ </td>
+ <td style="text-align:center;">
+ <input type="text" name="syoutai_time_4_0" value="<?php echo \htmlentities($syoutai_time_4_0??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_4_1" value="<?php echo \htmlentities($syoutai_time_4_1??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_4_2" value="<?php echo \htmlentities($syoutai_time_4_2??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_4_3" value="<?php echo \htmlentities($syoutai_time_4_3??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_4_4" value="<?php echo \htmlentities($syoutai_time_4_4??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_4_5" value="<?php echo \htmlentities($syoutai_time_4_5??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_4_6" value="<?php echo \htmlentities($syoutai_time_4_6??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_4_7" value="<?php echo \htmlentities($syoutai_time_4_7??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_4_8" value="<?php echo \htmlentities($syoutai_time_4_8??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="syoutai_time_4_9" value="<?php echo \htmlentities($syoutai_time_4_9??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ </td>
+ </tr>
+
+ </table>
+ </div>
+
+ <div class="msr_text_01" style="width:100%;">
+ <label style="font-weight:bold;">
+ (来場者)来場予定日時
+ <br><span style="color:red;">※「参加しない」等の選択肢を追加する場合は日付欄には「2999/01/01」を入力してください。</span><!-- <?php /* 2021/07/08 Add */ ?> -->
+ </label>
+ <!-- <input type="text" name="event_raijyou_yotei_time" value="<?php echo \htmlentities($event_raijyou_yotei_time??'', ENT_QUOTES, 'UTF-8', false); ?>" /> -->
+ <table border="1">
+ <tr>
+ <td style="background-color:#ffdddd;">日付</td>
+ <td style="text-align:center;"><input type="text" name="raijyou_ymd_0" value="<?php echo \htmlentities($raijyou_ymd_0??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:100px;" class="datepicker" /></td>
+ <td style="text-align:center;"><input type="text" name="raijyou_ymd_1" value="<?php echo \htmlentities($raijyou_ymd_1??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:100px;" class="datepicker" /></td>
+ <td style="text-align:center;"><input type="text" name="raijyou_ymd_2" value="<?php echo \htmlentities($raijyou_ymd_2??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:100px;" class="datepicker" /></td>
+ <td style="text-align:center;"><input type="text" name="raijyou_ymd_3" value="<?php echo \htmlentities($raijyou_ymd_3??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:100px;" class="datepicker" /></td>
+ <td style="text-align:center;"><input type="text" name="raijyou_ymd_4" value="<?php echo \htmlentities($raijyou_ymd_4??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:100px;" class="datepicker" /></td>
+ </tr>
+
+ <tr>
+ <td style="background-color:#ffdddd;">時間帯</td>
+ <td style="text-align:center;">
+ <input type="text" name="raijyou_time_0_0" value="<?php echo \htmlentities($raijyou_time_0_0??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_0_1" value="<?php echo \htmlentities($raijyou_time_0_1??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_0_2" value="<?php echo \htmlentities($raijyou_time_0_2??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_0_3" value="<?php echo \htmlentities($raijyou_time_0_3??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_0_4" value="<?php echo \htmlentities($raijyou_time_0_4??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_0_5" value="<?php echo \htmlentities($raijyou_time_0_5??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_0_6" value="<?php echo \htmlentities($raijyou_time_0_6??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_0_7" value="<?php echo \htmlentities($raijyou_time_0_7??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_0_8" value="<?php echo \htmlentities($raijyou_time_0_8??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_0_9" value="<?php echo \htmlentities($raijyou_time_0_9??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ </td>
+ <td style="text-align:center;">
+ <input type="text" name="raijyou_time_1_0" value="<?php echo \htmlentities($raijyou_time_1_0??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_1_1" value="<?php echo \htmlentities($raijyou_time_1_1??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_1_2" value="<?php echo \htmlentities($raijyou_time_1_2??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_1_3" value="<?php echo \htmlentities($raijyou_time_1_3??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_1_4" value="<?php echo \htmlentities($raijyou_time_1_4??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_1_5" value="<?php echo \htmlentities($raijyou_time_1_5??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_1_6" value="<?php echo \htmlentities($raijyou_time_1_6??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_1_7" value="<?php echo \htmlentities($raijyou_time_1_7??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_1_8" value="<?php echo \htmlentities($raijyou_time_1_8??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_1_9" value="<?php echo \htmlentities($raijyou_time_1_9??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ </td>
+ <td style="text-align:center;">
+ <input type="text" name="raijyou_time_2_0" value="<?php echo \htmlentities($raijyou_time_2_0??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_2_1" value="<?php echo \htmlentities($raijyou_time_2_1??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_2_2" value="<?php echo \htmlentities($raijyou_time_2_2??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_2_3" value="<?php echo \htmlentities($raijyou_time_2_3??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_2_4" value="<?php echo \htmlentities($raijyou_time_2_4??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_2_5" value="<?php echo \htmlentities($raijyou_time_2_5??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_2_6" value="<?php echo \htmlentities($raijyou_time_2_6??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_2_7" value="<?php echo \htmlentities($raijyou_time_2_7??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_2_8" value="<?php echo \htmlentities($raijyou_time_2_8??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_2_9" value="<?php echo \htmlentities($raijyou_time_2_9??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ </td>
+ <td style="text-align:center;">
+ <input type="text" name="raijyou_time_3_0" value="<?php echo \htmlentities($raijyou_time_3_0??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_3_1" value="<?php echo \htmlentities($raijyou_time_3_1??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_3_2" value="<?php echo \htmlentities($raijyou_time_3_2??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_3_3" value="<?php echo \htmlentities($raijyou_time_3_3??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_3_4" value="<?php echo \htmlentities($raijyou_time_3_4??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_3_5" value="<?php echo \htmlentities($raijyou_time_3_5??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_3_6" value="<?php echo \htmlentities($raijyou_time_3_6??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_3_7" value="<?php echo \htmlentities($raijyou_time_3_7??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_3_8" value="<?php echo \htmlentities($raijyou_time_3_8??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_3_9" value="<?php echo \htmlentities($raijyou_time_3_9??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ </td>
+ <td style="text-align:center;">
+ <input type="text" name="raijyou_time_4_0" value="<?php echo \htmlentities($raijyou_time_4_0??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_4_1" value="<?php echo \htmlentities($raijyou_time_4_1??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_4_2" value="<?php echo \htmlentities($raijyou_time_4_2??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_4_3" value="<?php echo \htmlentities($raijyou_time_4_3??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_4_4" value="<?php echo \htmlentities($raijyou_time_4_4??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_4_5" value="<?php echo \htmlentities($raijyou_time_4_5??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_4_6" value="<?php echo \htmlentities($raijyou_time_4_6??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_4_7" value="<?php echo \htmlentities($raijyou_time_4_7??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_4_8" value="<?php echo \htmlentities($raijyou_time_4_8??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ <input type="text" name="raijyou_time_4_9" value="<?php echo \htmlentities($raijyou_time_4_9??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width:130px;" />
+ </td>
+ </tr>
+
+ </table>
+ </div>
+
+ <div class="msr_text_01">
+ <label style="font-weight:bold;">比較イベント</label>
+ <select name="event_compare_event_id">
+ <option value=""></option>
+ <?php echo blade_html_options(['options' => $compare_events, 'selected' => $event_compare_event_id]); ?>
+
+ </select>
+ </div>
+
+ <p class="msr_btn15">
+ <?php if($mode=='insert'): ?>
+ <a href="javascript:_regist('insert');void(0);">上記内容で新規登録する</a>
+ <?php else: ?>
+ <a href="javascript:_regist('update');void(0);">上記内容で更新する</a>
+ &nbsp;&nbsp;&nbsp;
+ <a href="javascript:_regist('delete');void(0);">削除する</a>
+ &nbsp;&nbsp;&nbsp;
+ <?php if($event_archived_flg != '0'): ?>
+ <a href="#" style="pointer-events: none; background-color: grey">アーカイブ済み</a>
+ <?php elseif(blade_date_format($event_kaisai_ymd_ed, '%Y-%m-%d') >= date('%Y-%m-%d')): ?>
+ <a href="#" style="pointer-events: none; background-color: grey">アーカイブする</a>
+ <?php else: ?>
+ <a href="javascript:_regist('archive');void(0);">アーカイブする</a>
+ <?php endif; ?>
+ <?php endif; ?>
+ &nbsp;&nbsp;&nbsp;
+ <a href="javascript:location.href='?page=event_list&sess_no_init=1';void(0);">一覧へ戻る</a>
+ </p>
+
+ </form>
+
+</div>

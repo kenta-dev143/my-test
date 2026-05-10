@@ -1,0 +1,8 @@
+Order Allow,Deny
+Allow from all
+
+<Files ~"^\.(htaccess|htpasswd)$">
+        Deny from all
+</Files>
+
+RewriteEngine Off

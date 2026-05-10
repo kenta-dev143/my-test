@@ -1,0 +1,192 @@
+/*######################*/
+/*## TOPページ SETTING ##*/
+/*######################*/
+.home {}
+/* ----------------------------------------------------- */
+/* MAIN SETTING ----------------------------------------------------- */
+/* ----------------------------------------------------- */
+#main {
+position: relative;
+}
+#main .main-slider {
+width: 100%;
+}
+#main .main-slider div span {
+position: relative;
+padding: 37.5% 0 0 0;
+width: 100%;
+height: 0;
+background-position: 50% 50%;
+background-size: cover;
+background-color: white;
+background-repeat: no-repeat;
+display: block;
+}
+.main-slider div.slider1 span {
+background-image: url("../images/main_1.jpg");
+}
+.main-slider div.slider2 span {
+background-image: url("../images/main_2.jpg");
+}
+#main .main-mark {
+position: absolute;
+width: 100%;
+height: 100%;
+left: 0;
+top: 0;
+z-index: 100;
+}
+#main .main-mark span {
+width: 28%;
+height: auto;
+margin: 0 auto;
+}
+/* BREAK POINT -----------------------------------------------------*/
+@media (max-width: 767px) {
+#main .main-slider div span {
+	padding: 125% 0 0 0;
+}
+.main-slider div.slider1 span {
+	background-image: url("../images/main_1_sp.jpg");
+}
+.main-slider div.slider2 span {
+	background-image: url("../images/main_2_sp.jpg");
+}
+#main .main-mark span {
+	width: 66.6666%;
+}
+}
+@media (max-width: 320px) {}
+
+/* ----------------------------------------------------- */
+/* EXHIBITING SETTING ----------------------------------------------------- */
+/* ----------------------------------------------------- */
+#exhibiting-company {
+padding: 6rem 0 0 0;
+}
+.company-list {}
+.company-list a.company {
+display: block;
+position: relative;
+width: 100%;
+height: 0;
+padding: 100% 0 0 0;
+margin: 0.2rem 0;
+}
+.company-list a.company span {
+border: 1px solid rgba(221, 221, 221, 1.00);
+position: absolute;
+left: 0;
+top: 0;
+width: 100%;
+height: 100%;
+overflow: hidden;
+}
+.company-list a.company span img {
+max-width: 100%;
+max-height: 100%;
+}
+.company-list a.company span img {
+position: absolute;
+transform: translate(-50%, -50%);
+left: 50%;
+top: 50%;
+}
+.company-list.silver .col-md {
+min-width: 12.5%;
+max-width: 12.5%;
+}
+.company-list.silver {
+padding-bottom: 0.8rem;
+border-bottom: 1px solid rgba(221, 221, 221, 1.00);
+}
+.company-list.bronze {
+padding-top: 0.8rem;
+padding-bottom: 0.8rem;
+border-bottom: 1px solid rgba(221, 221, 221, 1.00);
+}
+.company-list.bronze .company-bronze-slider div {
+padding: 0 0.2rem
+}
+/* BREAK POINT -----------------------------------------------------*/
+@media (max-width: 767px) {
+#exhibiting-company {
+	padding: 4rem 0 0 0;
+}
+.company-list.silver .col-md {
+	min-width: inherit;
+	max-width: inherit;
+}
+}
+@media (max-width: 320px) {}
+/* ----------------------------------------------------- */
+/* ACCESS THEME CORNER SETTING ----------------------------------------------------- */
+/* ----------------------------------------------------- */
+/* BREAK POINT -----------------------------------------------------*/
+#access-theme-corner {
+padding: 6rem 0 0 0;
+}
+#access-theme-corner .headline-h3 strong {
+display: block;
+text-align: center;
+padding: 0 0 0 0;
+}
+#access-theme-corner .headline-h3 strong svg {
+max-width: 10rem;
+height: auto;
+}
+#access-theme-corner .theme-list {
+padding: 0;
+}
+#access-theme-corner .theme {
+margin: 0 0 3rem 0;
+display: block;
+}
+#access-theme-corner .theme span {
+display: block;
+overflow: hidden;
+border-radius: 100%;
+position: relative;
+height: 0;
+width: 100%;
+padding: 100% 0 0 0;
+-moz-transition: -moz-transform 0.4s ease;
+-webkit-transition: -webkit-transform 0.4s ease;
+-ms-transition: -ms-transform 0.4s ease;
+transition: transform 0.4s ease;
+}
+#access-theme-corner .theme span img {
+min-width: 100%;
+min-height: 100%;
+position: absolute;
+top: 0;
+left: 0;
+}
+#access-theme-corner .theme strong {
+display: block;
+padding: 1.5rem 0 0 0;
+text-align: center;
+color: rgba(101, 56, 57, 1.00);
+font-weight: 700;
+font-size: 1.8rem;
+line-height: 1.444em;
+}
+/*HOVER*/ @media (min-width: 768px) {
+#access-theme-corner .theme:hover span {
+	-moz-transform: translate(0, 0) scale(1.08);
+	-webkit-transform: translate(0, 0) scale(1.08);
+	-ms-transform: translate(0, 0) scale(1.08);
+	transform: translate(0, 0) scale(1.08);
+}
+}
+/*HOVER*/
+@media (max-width: 767px) {
+#access-theme-corner {
+	padding: 4rem 0 0 0;
+}
+
+#access-theme-corner .theme strong {
+	font-size: 1.5rem;
+}
+}
+@media (max-width: 320px) {}

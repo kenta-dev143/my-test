@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>{{ $event_rec['event_name'] }}-ログイン</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+</head>
+@verbatim
+<style>
+.loginTitle {
+    max-width: 800px;
+    padding: 0px 50px 0px 50px;
+    background: #0370c0;
+    box-shadow: 2px 2px 10px #ccc;
+    /* height: 40px; */
+    margin:50px auto 0px auto;
+    display: block;
+    text-align:center;
+    color:white;
+    font-size:20px;
+}
+</style>
+@endverbatim
+
+<body class="c2">
+
+<header>
+  <div class="inner header_inner">
+    <h1 id="logo"><a href="./"><img src="../../images/logo.png" alt="日本アクセス"></a></h1>
+  </div>
+  <p class="header_kaijyou">{{ $event_rec['event_name'] }}<span class="kaijyouNmae">({{ $event_rec['event_kaijyou_name'] }})</span></p>  
+</header>
+
+<div class="loginTitle">
+{{ $event_rec['event_name'] }}　マイページ
+</div>
+<div class="inner_wrap_mapage" style="margin-top:0px;">
+  <div class="form-wrapper">
+    <h1 class="login-h">ログイン</h1>
+
+    @if($err_msg['0'] !='')
+      @foreach($err_msg as $msg)
+        <span style="color:red;">{{ $msg }}</span><br>
+       @endforeach
+     @endif
+
+    <form action="./" method="post">
+    <input type="hidden" name="exec" value="login">
+    <input type="hidden" name="page" value="login">
+      <div class="form-item">
+        <label for="email"></label>
+        <input type="text" name="login_id" value="{{ $login_id }}" required="required" autocomplete="off" placeholder="Email Address"></input>
+      </div>
+      <div class="form-item">
+        <label for="password"></label>
+        <input type="password" name="login_pass" value="{{ $login_pass }}" required="required" autocomplete="off" placeholder="Password"></input>
+      </div>
+      <div class="button-panel">
+        <input type="submit" class="button" title="Sign In" value="ログイン"></input>
+      </div>
+      <div style="margin-top: 10px;">
+        <span style="font-weight:bold;">初めてログインされる方</span><br>
+        <span style="font-weight:bold;">パスワードをお忘れの方</span><br>
+        <div style="padding-left:20px;">下記よりパスワード設定後ログインください。</div>
+        <a href="?page=pass_reissue">パスワード設定はこちら</a><br>
+        <a href="../user_login_info.pdf" target="_blank">ログイン・操作方法についてはこちら</a>
+      </div>
+    </form>
+
+  </div>
+
+  <div style="padding:10px;background-color:#eeeeee;">
+    ※個人情報の取り扱いについて<br>
+    １．利用目的<br>
+    収集した個人情報は、以下の目的のために利用いたします。<br>
+    ①展示会当日の入退出管理<br>
+    ②{{ $event_rec['event_exhibition_name'] }}システムの利用及び付随する営業活動<br>
+    ③問合せ対応<br>
+    <br>
+    ２．第三者提供<br>
+    当社は、以下の場合を除いて、個人データを第三者へ提供することはいたしません。<br>
+    ①法令に基づく場合<br>
+    ②人の生命・身体・財産を保護するために必要で、本人から同意を得ることが難しい場合<br>
+    ③公衆衛生の向上・児童の健全な育成のために必要で、本人から同意を得ることが難しい場合<br>
+    ④国の機関や地方公共団体、その委託者などによる法律事務の遂行にあたって協力する必要がありかつ本人の同意を得ることで事務遂行に影響が生じる可能性がある場合<br>
+    <br>
+    ３．開示請求<br>
+    提供いただいた個人情報につき、ご本人から自己情報の照会・訂正・追加・削除および利用停止をもとめられたときは、遅滞なく、合理的な範囲で対応します。<br>
+    <br>
+  </div>
+</div>
+<!--/#contents-->
+
+<footer>
+
+<div id="copyright">
+<small>Copyright (c) NIPPON ACCESS, INC. All rights reserved.</small>
+</div>
+
+</footer>
+
+</body>
+</html>

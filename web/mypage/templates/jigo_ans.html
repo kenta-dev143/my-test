@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>{$event_rec.event_name|escape}-ご来場アンケート</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../css/style.css">
+
+{literal}
+<script>
+  function _ans(ans){
+    document.form_edit.submit();
+  }
+</script>
+{/literal}
+
+</head>
+
+<body class="c2">
+
+<header>
+  {include file="$_SYSTEM_ROOT_DIR/mypage/templates/mypage_header.html"}
+</header>
+
+<div class="inner_wrap">
+
+  {if $err_msg.0 !=''}
+      <div class="errArea">
+          {foreach from=$err_msg item=msg}
+              {$msg|escape}<br>
+          {/foreach}
+      </div><br>
+  <!-- {* {elseif $success_msg!=""} *} -->
+  <!-- {*    <div class="successArea">{$success_msg}</div> *} -->
+  {/if}
+
+
+
+
+    <h1 class="msr_h103">ご来場アンケート</h1>
+    <div class="msr_radio_01">
+      {if $jigo_enq_open!="1"}
+           只今準備中です。しばらくお待ち下さい。<br>
+      {elseif $kaitouzumi=="1"}
+           ご来場アンケートは回答済みです。<br>
+           <br>
+           ご回答にご協力いただき誠にありがとございました。<br>
+           <br>
+           <ul class="Venue-btn" id="ans">
+           <li class="Venue-btn01" onclick="location.href='./';"><a href="javascript:void(0);">マイページに戻る</a></li>
+           </ul>
+      {elseif $exec=="save" && $err_msg.0 ==''}
+           ご来場アンケートご回答にご協力いただき誠にありがとございました。<br>
+           <br>
+           <br>
+           <ul class="Venue-btn" id="ans">
+           <li class="Venue-btn01" onclick="location.href='./';"><a href="javascript:void(0);">マイページに戻る</a></li>
+           </ul>
+      {else}
+          {$login.user_kigyou_name|escape}<br>
+          {$login.user_name|escape} 様<br>
+        「{$event_rec.event_name|escape}」のご来場アンケートにご協力ください。<br>
+        <br>
+        <form name="form_edit" action="./?page=jigo_ans" method="post" onSubmit="return false;">
+        <input type="hidden" name="exec" value="save">
+
+              <dl class="jigo_table">
+              {foreach from=$questions key=field_name item=rec name=loop}
+                  {if $rec.type != "sub_text"}
+                      {if !$smarty.foreach.loop.first}
+                          </dd>
+                      {/if}
+                      <hr>
+                      <dt style="font-size:20px;font-weight:bold;margin-bottom:15px;">【設問{$rec.no|escape}】{$rec.question|escape}{if $rec.hissu_flg=='1'}&nbsp;<span style="color:red;">【必須】</span>{/if}</dt>
+                      <dd>
+                  {else}
+                      <br />{$rec.question|escape}
+                  {/if}
+                  {if $rec.type == "radio"}
+                      {foreach from=$rec.options key=k2 item=r2 name=foo}
+                          <input type="{$rec.type}" style="top:-4px;position:relative;" name={$field_name} value="{$k2}"{if $row[$field_name]==$k2} checked="true" {/if} id="{$field_name}_{$smarty.foreach.foo.index}"><label for="{$field_name}_{$smarty.foreach.foo.index}"><span style="font-size:22px;">{$r2|escape}</span></label><br>
+                      {/foreach}
+                  {/if}
+                  {if $rec.type == "checkbox"}
+                      {foreach from=$rec.options key=k2 item=r2 name=foo}
+                          <input type="{$rec.type}" style="top:-4px;position:relative;" name={$field_name}[{$smarty.foreach.foo.index}] value="{$k2}"{if $row[$field_name][$smarty.foreach.foo.index]==$k2} checked="true" {/if} id="{$field_name}_{$smarty.foreach.foo.index}"><label for="{$field_name}_{$smarty.foreach.foo.index}"><span style="font-size:22px;">{$r2|escape}</span></label><br>
+                      {/foreach}
+                  {/if}
+
+                  {if $rec.type == "text"}
+                  <input type=text name="{$field_name}" style="width:70%;" value="{$row[$field_name]|escape}" class="area">
+                  {/if}
+
+                  {if $rec.type == "sub_text"}
+                  <br />
+                  <textarea name="{$field_name}" style="width:70%;" class="area">{$row[$field_name]}</textarea>
+                  {/if}
+                  {if $smarty.foreach.loop.last}
+                      </dd>
+                  {/if}
+              {/foreach}
+              </dl>
+          <ul class="Venue-btn" id="ans">
+            <li class="Venue-btn01" onclick="_ans();"><a href="javascript:void(0);">上記内容で回答する</a></li>
+          </ul>
+          </form>
+      {/if}
+    </div>
+
+
+</div>
+<!--/#contents-->
+
+<footer>
+
+<div id="copyright">
+<small>Copyright (c) NIPPON ACCESS, INC. All rights reserved.</small>
+</div>
+
+</footer>
+
+</body>
+</html>
